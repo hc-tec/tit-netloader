@@ -10,6 +10,9 @@ add_compile_options(-Wall -O0 -std=c++17 -g -Wno-sign-compare -Wno-class-memacce
 
 include_directories(src)
 
+link_libraries(co)
+link_libraries(backtrace)
+
 add_subdirectory(src/core)
 add_subdirectory(test)
 
