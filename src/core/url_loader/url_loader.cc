@@ -4,9 +4,25 @@
 
 #include "url_loader.h"
 
+#include "core/network/host_resolver.h"
+#include "core/network/network_context.h"
+#include "core/network/resource_scheduler.h"
+#include "core/url_request/url_request.h"
+
 namespace tit {
 namespace net {
 
+URLLoader::URLLoader(uint64 request_id,
+                     const RequestParams &request_params,
+                     NetworkContext *network_context,
+                     URLLoader::Delegate *delegate)
+    : request_id_(request_id),
+      delegate_(delegate),
+      network_context_(network_context),
+      resource_scheduler_(network_context->resource_scheduler()) {}
+
+
+URLLoader::~URLLoader() = default;
 
 }  // namespace net
 }  // namespace tit

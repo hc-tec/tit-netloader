@@ -13,19 +13,26 @@ namespace tit {
 namespace net {
 
 class NetworkContext;
+class RequestParams;
+class RequestManager;
+class URLLoaderFactory;
 
 class NetworkService : public URLLoader::Delegate {
  public:
 
+  NetworkService();
+  ~NetworkService();
+
+   std::unique_ptr<URLLoader> CreateURLLoader(
+      const RequestParams& request_params);
 
  private:
   std::unique_ptr<NetworkContext> network_context_;
+  std::unique_ptr<RequestManager> request_manager_;
+  std::unique_ptr<URLLoaderFactory> url_loader_factory_;
 };
 
-NetworkService* GetNetworkService() {
-  static NetworkService service;
-  return &service;
-}
+NetworkService* GetNetworkService();
 
 }  // namespace net
 }  // namespace tit
