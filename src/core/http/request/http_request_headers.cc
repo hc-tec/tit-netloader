@@ -67,5 +67,14 @@ std::string HttpRequestHeaders::GetHeader(const std::string& name) {
   return headers_[name];
 }
 
+std::string HttpRequestHeaders::ToString() {
+  std::string output;
+  for (auto& [key, value] : headers_) {
+    output.append(key.c_str()).append(value.c_str()).append("\r\n");
+  }
+  output.append("\r\n");
+  return output;
+}
+
 }  // namespace net
 }  // namespace tit

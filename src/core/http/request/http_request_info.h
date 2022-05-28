@@ -9,16 +9,30 @@
 #include <string>
 
 #include "core/base/url/url.h"
-#include "core/http/http_request_headers.h"
-#include "core/http/http_request_body.h"
+#include "http_request_body.h"
+#include "http_request_headers.h"
 
 namespace tit {
 namespace net {
+
+enum Method {
+  GET,
+  POST,
+  PUT,
+  PATCH,
+  DELETE,
+  OPTION,
+  HEAD
+};
+
+std::string MethodToString(Method method);
 
 struct HttpRequestInfo {
   HttpRequestInfo();
   HttpRequestInfo(const HttpRequestInfo& other);
   ~HttpRequestInfo();
+
+  std::string GenerateRequestLine();
 
   URL url;
 

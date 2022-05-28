@@ -18,6 +18,8 @@ class HttpRequestHeaders {
 
   std::string GetHeader(const std::string& name);
 
+  std::string ToString();
+
   /**
    * Possible values for headers.
    */

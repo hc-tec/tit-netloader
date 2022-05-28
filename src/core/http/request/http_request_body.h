@@ -8,7 +8,7 @@
 #include <map>
 #include <string>
 
-#include "core/http/http_request_headers.h"
+#include "http_request_headers.h"
 
 namespace tit {
 namespace net {
@@ -18,6 +18,7 @@ class HttpRequestBody {
 
   virtual void DeclareHeaders(HttpRequestHeaders& headers) = 0;
 
+  virtual std::string ToString() = 0;
 };
 
 class HttpRequestBufferBody : public HttpRequestBody {
@@ -26,6 +27,10 @@ class HttpRequestBufferBody : public HttpRequestBody {
                         const std::string& buffer);
 
   void DeclareHeaders(HttpRequestHeaders& headers) override;
+
+  std::string ToString() override {
+    return buffer_;
+  }
 
   const std::string& content_type() { return content_type_; };
   const std::string& buffer() { return buffer_; }
