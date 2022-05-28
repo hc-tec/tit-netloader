@@ -5,13 +5,16 @@
 #ifndef TIT_NETLOADER_HTTP_NETWORK_TRANSACTION_H
 #define TIT_NETLOADER_HTTP_NETWORK_TRANSACTION_H
 
+#include <memory>
+
 #include "core/http/http_transaction.h"
-#include "core/http/http_response_info.h"
+#include "core/http/response/http_response_info.h"
 
 namespace tit {
 namespace net {
 
 class HttpNetworkSession;
+class HttpStream;
 
 class HttpNetworkTransaction : public HttpTransaction {
  public:
@@ -27,6 +30,8 @@ class HttpNetworkTransaction : public HttpTransaction {
   HttpRequestInfo* request_info_;
 
   HttpResponseInfo response_info_;
+
+  std::unique_ptr<HttpStream> stream_;
 };
 
 }  // namespace net

@@ -22,11 +22,8 @@ HttpNetworkTransaction::~HttpNetworkTransaction() {}
 int HttpNetworkTransaction::Start(HttpRequestInfo *request_info) {
   request_info_ = request_info;
   HttpStreamFactory* stream_factory = session_->http_stream_factory();
-//  std::unique_ptr<StreamSocket> socket =
-//      std::make_unique<TransportClientSocket>();
-  StreamSocket* socket =
-      static_cast<StreamSocket *>(new TransportClientSocket());
-//  std::unique_ptr<TransportClientSocket> socket = std::make_unique<TransportClientSocket>();
+
+  std::unique_ptr<TransportClientSocket> socket = std::make_unique<TransportClientSocket>();
   std::unique_ptr<ClientSocketHandle> handle;
   handle->SetSocket(std::move(socket));
   stream_ = stream_factory->RequestStream(std::move(handle), request_info);
