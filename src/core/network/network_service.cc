@@ -8,6 +8,7 @@
 #include "core/network/network_context.h"
 #include "core/url_loader/url_loader_factory.h"
 #include "core/url_request/url_request.h"
+#include "core/url_loader/request_params.h"
 
 namespace tit {
 namespace net {

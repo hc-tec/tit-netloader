@@ -8,7 +8,9 @@
 namespace tit {
 namespace net {
 
-class resource_scheduler {};
+class ResourceScheduler {
+
+};
 
 }  // namespace net
 }  // namespace tit

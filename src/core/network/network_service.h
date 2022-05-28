@@ -12,8 +12,9 @@
 namespace tit {
 namespace net {
 
+struct RequestParams;
+
 class NetworkContext;
-class RequestParams;
 class RequestManager;
 class URLLoaderFactory;
 
