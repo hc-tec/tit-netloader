@@ -8,6 +8,7 @@
 #include "core/network/host_resolver.h"
 #include "core/network/network_context.h"
 #include "core/network/resource_scheduler.h"
+#include "core/url_loader/request_params.h"
 #include "core/url_request/url_request.h"
 #include "core/url_request//url_request_context.h"
 #include "core/url_request/url_request_context_builder.h"
@@ -28,12 +29,19 @@ URLLoader::URLLoader(uint64 request_id,
           std::make_unique<URLRequestContextBuilder>(network_context)) {
 
   url_request_context_ = url_request_context_builder_->Build();
-
+  url_request_ = url_request_context_->CreateURLRequest(request_params.request_info.url,
+                                         request_params.priority,
+                                         this);
+  
 }
 
 
 URLLoader::~URLLoader() {
 
+}
+
+void URLLoader::Start() {
+  url_request_->Start();
 }
 
 }  // namespace net

@@ -9,17 +9,18 @@
 
 #include <co/def.h>
 
+#include "core/url_request/url_request.h"
+
 namespace tit {
 namespace net {
+struct RequestParams;
 
 class NetworkContext;
-class RequestParams;
 class ResourceScheduler;
-class URLRequest;
 class URLRequestContext;
 class URLRequestContextBuilder;
 
-class URLLoader {
+class URLLoader : public URLRequest::Delegate {
  public:
 
   class Delegate {
@@ -32,6 +33,10 @@ class URLLoader {
             Delegate* delegate);
 
   ~URLLoader();
+
+  void ScheduleStart();
+
+  void Start();
 
  private:
 
