@@ -16,8 +16,12 @@ class URL {
 
   URL(std::string url);
 
+  const std::string& scheme() { return scheme_; }
+
+  const std::string& path() { return "/"; }
 
  private:
+  std::string scheme_;
   std::string origin_url_;
 };
 

@@ -11,7 +11,7 @@ namespace net {
 
 
 URL::URL()
-    : origin_url_(nullptr) {}
+    : origin_url_("/") {}
 
 URL::URL(std::string url)
     : origin_url_(std::move(url)) {
