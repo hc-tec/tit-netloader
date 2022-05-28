@@ -2,8 +2,8 @@
 // Created by titto on 2022/5/28.
 //
 
-#ifndef TIT_NETLOADER_TRANSPORT_CLIENT_SOCKET_H
-#define TIT_NETLOADER_TRANSPORT_CLIENT_SOCKET_H
+#ifndef TIT_NETLOADER_SOCKET_H
+#define TIT_NETLOADER_SOCKET_H
 
 namespace tit {
 namespace net {
@@ -24,4 +24,4 @@ class Socket {
 }  // namespace net
 }  // namespace tit
 
-#endif  // TIT_NETLOADER_TRANSPORT_CLIENT_SOCKET_H
+#endif  // TIT_NETLOADER_SOCKET_H
