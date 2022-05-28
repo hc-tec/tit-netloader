@@ -4,10 +4,14 @@
 
 #include "url_loader.h"
 
+#include "core/http/http_transaction_factory.h"
 #include "core/network/host_resolver.h"
 #include "core/network/network_context.h"
 #include "core/network/resource_scheduler.h"
 #include "core/url_request/url_request.h"
+#include "core/url_request//url_request_context.h"
+#include "core/url_request/url_request_context_builder.h"
+#include "core/url_request/url_request_job_factory.h"
 
 namespace tit {
 namespace net {
@@ -19,10 +23,18 @@ URLLoader::URLLoader(uint64 request_id,
     : request_id_(request_id),
       delegate_(delegate),
       network_context_(network_context),
-      resource_scheduler_(network_context->resource_scheduler()) {}
+      resource_scheduler_(network_context->resource_scheduler()),
+      url_request_context_builder_(
+          std::make_unique<URLRequestContextBuilder>(network_context)) {
+
+  url_request_context_ = url_request_context_builder_->Build();
+
+}
 
 
-URLLoader::~URLLoader() = default;
+URLLoader::~URLLoader() {
+
+}
 
 }  // namespace net
 }  // namespace tit

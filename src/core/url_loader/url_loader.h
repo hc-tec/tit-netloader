@@ -12,10 +12,12 @@
 namespace tit {
 namespace net {
 
-class URLRequest;
-class RequestParams;
 class NetworkContext;
+class RequestParams;
 class ResourceScheduler;
+class URLRequest;
+class URLRequestContext;
+class URLRequestContextBuilder;
 
 class URLLoader {
  public:
@@ -38,6 +40,9 @@ class URLLoader {
 
   NetworkContext* network_context_;
   ResourceScheduler* resource_scheduler_;
+
+  std::unique_ptr<URLRequestContextBuilder> url_request_context_builder_;
+  std::unique_ptr<URLRequestContext> url_request_context_;
   std::unique_ptr<URLRequest> url_request_;
 
 };
