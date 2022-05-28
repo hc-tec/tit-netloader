@@ -4,7 +4,10 @@
 
 #include "url_request_context_builder.h"
 
+#include "core/http/network_layer/http_network_session.h"
 #include "core/http/http_transaction_factory.h"
+#include "core/http/network_layer/http_network_layer.h"
+#include "core/http/cache/http_cache.h"
 #include "core/network/network_context.h"
 #include "core/url_request/url_request_context.h"
 #include "core/url_request/url_request_job_factory.h"
@@ -29,11 +32,27 @@ std::unique_ptr<URLRequestContext> URLRequestContextBuilder::Build() {
     url_request_job_factory_ = std::make_unique<URLRequestJobFactory>();
   context->set_job_factory(std::move(url_request_job_factory_));
 
-  if (http_transaction_factory_ == nullptr)
-    http_transaction_factory_ = std::make_unique<HttpTransactionFactory>();
+  std::unique_ptr<HttpNetworkSession> session =
+      std::make_unique<HttpNetworkSession>();
+  SetHttpNetworkSessionComponents(session.get(), context.get());
+
+
+  if (http_transaction_factory_ == nullptr) {
+    std::unique_ptr<HttpTransactionFactory> network_layer =
+        std::make_unique<HttpNetworkLayer>(session.get());
+    http_transaction_factory_ = std::make_unique<HttpCache>(
+        std::move(network_layer));
+  }
   context->set_transaction_factory(std::move(http_transaction_factory_));
 
   return context;
+}
+
+void URLRequestContextBuilder::SetHttpNetworkSessionComponents(
+    HttpNetworkSession *session,
+    URLRequestContext *request_context) {
+  session->host_resolver_ = network_context_->host_resolver();
+
 }
 
 }  // namespace net

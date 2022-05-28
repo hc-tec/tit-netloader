@@ -16,11 +16,17 @@ URLRequestContext::URLRequestContext() {}
 URLRequestContext::~URLRequestContext() {}
 
 std::unique_ptr<URLRequest> URLRequestContext::CreateURLRequest(
-    const URL &url, RequestPriority priority, URLRequest::Delegate *delegate) {
-  return std::make_unique<URLRequest>(url,
+    const URL &url,
+    RequestPriority priority,
+    URLRequest::Delegate *delegate) {
+  auto url_request = std::make_unique<URLRequest>(url,
                                       priority,
                                       delegate,
                                       this);
+
+  url_request_ = url_request.get();
+
+  return url_request;
 }
 
 }  // namespace net

@@ -12,6 +12,7 @@ namespace net {
 
 class NetworkContext;
 class HostResolver;
+class HttpNetworkSession;
 class HttpTransactionFactory;
 class ResourceScheduler;
 class URLRequest;
@@ -37,6 +38,9 @@ class URLRequestContextBuilder {
   }
 
  private:
+
+  void SetHttpNetworkSessionComponents(HttpNetworkSession* session,
+                                       URLRequestContext* request_context);
 
   NetworkContext* network_context_;
 
