@@ -4,6 +4,8 @@
 
 #include "http_cache.h"
 
+#include "core/http/http_transaction.h"
+
 namespace tit {
 namespace net {
 
@@ -16,6 +18,7 @@ std::unique_ptr<HttpTransaction> HttpCache::CreateTransaction() {
 
 HttpNetworkSession* HttpCache::GetSession() { return nullptr; }
 
+HttpCache::~HttpCache() {}
 
 }  // namespace net
 }  // namespace tit
