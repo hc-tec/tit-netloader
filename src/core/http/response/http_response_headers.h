@@ -5,10 +5,12 @@
 #ifndef TIT_NETLOADER_HTTP_RESPONSE_HEADERS_H
 #define TIT_NETLOADER_HTTP_RESPONSE_HEADERS_H
 
+#include "core/http/http_headers.h"
+
 namespace tit {
 namespace net {
 
-class http_response_headers {};
+using HttpResponseHeaders = HttpHeaders;
 
 }  // namespace net
 }  // namespace tit

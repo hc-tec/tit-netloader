@@ -4,6 +4,8 @@
 
 #include "http_request_info.h"
 
+#include "core/socket/tcp/address.h"
+
 namespace tit {
 namespace net {
 
@@ -26,7 +28,7 @@ std::string MethodToString(Method method) {
 
 HttpRequestInfo::HttpRequestInfo()
     : url("/"),
-      method("GET"),
+      method(GET),
       headers() {
 
 }
@@ -35,6 +37,8 @@ HttpRequestInfo::HttpRequestInfo(const HttpRequestInfo& other) {
   url = other.url;
   method = other.method;
   headers = other.headers;
+  address = other.address;
+  body = other.body;
 }
 
 HttpRequestInfo::~HttpRequestInfo() {}
@@ -44,14 +48,19 @@ std::string HttpRequestInfo::GenerateRequestLine() {
   const size_t kSuffixLen = std::size(kSuffix) - 1;
   std::string path = url.path();
   std::string request_line;
+  std::string method_str = MethodToString(method);
   const size_t expected_size =
-      method.size() + 1 + path.size() + kSuffixLen;
+      method_str.size() + 1 + path.size() + kSuffixLen;
   request_line.reserve(expected_size);
-  request_line.append(method);
+  request_line.append(method_str);
   request_line.append(1, ' ');
   request_line.append(path);
   request_line.append(kSuffix, kSuffixLen);
   return request_line;
+}
+
+void HttpRequestInfo::SetAddressByUrl() {
+  address = IPv4Address::Create(url.host().data(), url.port());
 }
 
 }  // namespace net

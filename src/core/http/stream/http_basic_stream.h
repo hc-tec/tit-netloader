@@ -13,8 +13,9 @@
 namespace tit {
 namespace net {
 
-class HttpRequestInfo;
-class HttpResponseInfo;
+struct HttpRequestInfo;
+struct HttpResponseInfo;
+class HttpResponseParser;
 class ClientSocketHandle;
 
 class HttpBasicStream : public HttpStream {
@@ -40,6 +41,7 @@ class HttpBasicStream : public HttpStream {
   std::string read_buf_;
   HttpRequestInfo* request_info_;
   HttpResponseInfo* response_info_;
+  std::unique_ptr<HttpResponseParser> response_parser_;
 };
 
 }  // namespace net

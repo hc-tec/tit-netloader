@@ -11,6 +11,7 @@
 #include "core/base/url/url.h"
 #include "http_request_body.h"
 #include "http_request_headers.h"
+#include "core/socket/tcp/address.h"
 
 namespace tit {
 namespace net {
@@ -34,9 +35,13 @@ struct HttpRequestInfo {
 
   std::string GenerateRequestLine();
 
+  void SetAddressByUrl();
+
   URL url;
 
-  std::string method;
+  Address::Ptr address;
+
+  Method method;
 
   HttpRequestHeaders headers;
 
