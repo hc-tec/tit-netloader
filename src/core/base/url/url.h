@@ -8,6 +8,7 @@
 #include <string>
 
 #include <co/def.h>
+#include "log/log_stream.h"
 
 namespace tit {
 namespace net {
@@ -36,6 +37,8 @@ class URL {
   uint32 port_;
   std::string path_;
 };
+
+log::LogStream& operator<<(log::LogStream& stream, URL url);
 
 }  // namespace net
 }  // namespace tit

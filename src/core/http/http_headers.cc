@@ -79,5 +79,10 @@ std::string HttpHeaders::ToString() {
   return output;
 }
 
+log::LogStream& operator<<(log::LogStream& stream, HttpHeaders headers) {
+  stream << headers.ToString();
+}
+
+
 }  // namespace net
 }  // namespace tit

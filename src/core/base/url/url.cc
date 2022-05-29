@@ -43,5 +43,9 @@ URL::URL(std::string url)
 
 //URL& URL::operator=(const URL& other) = default;
 
+log::LogStream& operator<<(log::LogStream& stream, URL url) {
+  stream << url.origin_url();
+}
+
 }  // namespace net
 }  // namespace tit

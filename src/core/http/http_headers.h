@@ -8,6 +8,8 @@
 #include <string>
 #include <map>
 
+#include "log/log_stream.h"
+
 namespace tit {
 namespace net {
 
@@ -64,6 +66,9 @@ class HttpHeaders {
   std::map<std::string, std::string> headers_;
 
 };
+
+log::LogStream& operator<<(log::LogStream& stream, HttpHeaders headers);
+
 
 }  // namespace net
 }  // namespace tit
