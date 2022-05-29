@@ -69,7 +69,7 @@ class IPv4Address : public Address {
     addr_.sin_port = hton16(port);
     int res = inet_pton(AF_INET, ip, &addr_.sin_addr);
     if (res <=0 ) {
-      LOG(ERROR) << "ip transform error";
+      LOG(ERROR) << "ip transform error, ip: " << ip << " port: " << port;
     }
   }
 
