@@ -1,3 +1,7 @@
 
-sudo cp lib* /usr/lib
+sudo cp lib* /usr/local/lib
+
+cd http-parser
+make
+sudo make install
 
