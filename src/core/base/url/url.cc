@@ -5,8 +5,10 @@
 #include "url.h"
 
 #include <utility>
+#include <http_parser.h>
 
-#include "core/base/url/url_parser.h"
+//#include "core/base/url/url_parser.h"
+#include "log/logging.h"
 
 namespace tit {
 namespace net {
@@ -18,11 +20,25 @@ URL::URL()
 URL::URL(std::string url)
     : origin_url_(std::move(url)),
       path_("/") {
-  TParseUrl parser(origin_url_.data());
-  scheme_ = std::move(parser.v_param.protocol);
-  host_ = std::move(parser.v_param.host);
-  port_ = std::move(parser.v_param.port);
-  path_.append(std::move(parser.v_param.uri));
+  http_parser_url u;
+  http_parser_url_init(&u);
+  int rv = http_parser_parse_url(origin_url_.data(), origin_url_.size(), 0, &u);
+  if (rv != 0) {
+    LOG(ERROR) << "URL parser error, url: " << origin_url_;
+    return;
+  }
+  auto& data = u.field_data;
+  scheme_ = origin_url_.substr(data[UF_SCHEMA].off, data[UF_SCHEMA].len);
+  host_ = origin_url_.substr(data[UF_HOST].off, data[UF_HOST].len);
+  port_ = atoi(origin_url_.substr(data[UF_PORT].off, data[UF_PORT].len).data());
+  path_ = origin_url_.substr(data[UF_PATH].off, data[UF_PATH].len);
+//  path_ = url.substr(data[UF_QUERY].off, data[UF_QUERY].len)
+
+//  TParseUrl parser(origin_url_.data());
+//  scheme_ = std::move(parser.v_param.protocol);
+//  host_ = std::move(parser.v_param.host);
+//  port_ = std::move(parser.v_param.port);
+//  path_.append(std::move(parser.v_param.uri));
 }
 
 //URL& URL::operator=(const URL& other) = default;

@@ -10,8 +10,12 @@ add_compile_options(-Wall -O0 -std=c++17 -g -Wno-sign-compare -Wno-class-memacce
 
 include_directories(src)
 
+# link dir of libhttp_parser.so
+link_directories(/usr/local/lib)
+
 link_libraries(co)
 link_libraries(backtrace)
+link_libraries(http_parser)
 
 add_subdirectory(src/core)
 add_subdirectory(test)
