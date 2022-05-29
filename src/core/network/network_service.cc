@@ -21,7 +21,12 @@ NetworkService::NetworkService()
 }
 
 std::unique_ptr<URLLoader> NetworkService::CreateURLLoader(
-    const RequestParams& request_params) {
+    RequestParams& request_params) {
+
+  if(!network_context_->URLLoaderIntercept(this, &request_params)) {
+    LOG(INFO) << "Intercept by URLLoaderInterceptor";
+    return nullptr;
+  }
 
   uint64 request_id = request_manager_->GenerateRequestId();
   std::unique_ptr<URLLoader> url_loader =
@@ -37,6 +42,16 @@ std::unique_ptr<URLLoader> NetworkService::CreateURLLoader(
 
 NetworkService::~NetworkService() {
 
+}
+
+void NetworkService::AddURLLoaderInterceptor(
+    std::shared_ptr<URLLoaderInterceptor> interceptor) {
+  network_context_->AddURLLoaderInterceptor(interceptor);
+}
+
+void NetworkService::RemoveURLLoaderInterceptor(
+    std::shared_ptr<URLLoaderInterceptor> interceptor) {
+  network_context_->RemoveURLLoaderInterceptor(interceptor);
 }
 
 NetworkService* GetNetworkService() {

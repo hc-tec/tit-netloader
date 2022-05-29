@@ -17,6 +17,7 @@ struct RequestParams;
 class NetworkContext;
 class RequestManager;
 class URLLoaderFactory;
+class URLLoaderInterceptor;
 
 class NetworkService : public URLLoader::Delegate {
  public:
@@ -25,9 +26,17 @@ class NetworkService : public URLLoader::Delegate {
   ~NetworkService();
 
    std::unique_ptr<URLLoader> CreateURLLoader(
-      const RequestParams& request_params);
+      RequestParams& request_params);
+
+  void AddURLLoaderInterceptor(
+      std::shared_ptr<URLLoaderInterceptor> interceptor);
+
+  void RemoveURLLoaderInterceptor(
+      std::shared_ptr<URLLoaderInterceptor> interceptor);
 
  private:
+  friend URLLoaderInterceptor;
+
   std::unique_ptr<NetworkContext> network_context_;
   std::unique_ptr<RequestManager> request_manager_;
   std::unique_ptr<URLLoaderFactory> url_loader_factory_;
