@@ -21,17 +21,18 @@ int main() {
     params.request_info.method = net::Method::POST;
     params.request_info.SetAddressByUrl();
     net::HttpRequestHeaders& headers = params.request_info.headers;
-    headers.PutHeaders(net::HttpRequestHeaders::ACCEPT_ENCODING,
+
+    headers.PutHeaders(net::HttpHeaders::ACCEPT_ENCODING,
                        "gzip, deflate");
-    headers.PutHeaders(net::HttpRequestHeaders::ACCEPT,
+    headers.PutHeaders(net::HttpHeaders::ACCEPT,
                        "application/json, text/plain, */*");
-    headers.PutHeaders(net::HttpRequestHeaders::CONNECTION,
-                       net::HttpRequestHeaders::Value::CONNECTION_UPGRADE);
-    headers.PutHeaders(net::HttpRequestHeaders::ACCEPT_ENCODING,
+    headers.PutHeaders(net::HttpHeaders::CONNECTION,
+                       net::HttpHeaders::Value::CONNECTION_UPGRADE);
+    headers.PutHeaders(net::HttpHeaders::ACCEPT_ENCODING,
                        "gzip, deflate");
-    headers.PutHeaders(net::HttpRequestHeaders::HOST,
+    headers.PutHeaders(net::HttpHeaders::HOST,
                        params.request_info.url.host() + ":" + std::to_string(params.request_info.url.port()));
-    headers.PutHeaders(net::HttpRequestHeaders::USER_AGENT,
+    headers.PutHeaders(net::HttpHeaders::USER_AGENT,
                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.53");
     params.request_info.body = std::make_shared<net::HttpRequestBufferBody>(
         "application/json;charset=UTF-8",
@@ -40,5 +41,6 @@ int main() {
     loader->Start();
   });
   std::cout << "hello " << std::endl;
-  co::sleep(10000);
+  char ch;
+  std::cin >> ch;
 }
