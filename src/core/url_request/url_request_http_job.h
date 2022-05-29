@@ -13,8 +13,8 @@
 namespace tit {
 namespace net {
 
-class HttpRequestInfo;
-class HttpResponseInfo;
+struct HttpRequestInfo;
+struct HttpResponseInfo;
 class HttpTransaction;
 
 class URLRequestHttpJob : public URLRequestJob {
