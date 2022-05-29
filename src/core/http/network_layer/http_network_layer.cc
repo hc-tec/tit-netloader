@@ -13,7 +13,7 @@ HttpNetworkLayer::HttpNetworkLayer(HttpNetworkSession* session)
     : session_(session) {}
 
 std::unique_ptr<HttpTransaction> HttpNetworkLayer::CreateTransaction() {
-  return std::unique_ptr<HttpTransaction>();
+  return std::make_unique<HttpNetworkTransaction>(session_);
 }
 
 HttpNetworkSession* HttpNetworkLayer::GetSession() { return session_; }

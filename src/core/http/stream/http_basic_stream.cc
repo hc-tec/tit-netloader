@@ -37,6 +37,7 @@ int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
                         request_info_->headers.ToString() +
                         request_info_->body->ToString();
   LOG(INFO) << "Send Request data: \n" << request;
+  connection_->socket()->Connect(request_info_->address);
   connection_->socket()->Write(request.data(), request.size());
   return OK;
 }

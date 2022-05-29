@@ -32,14 +32,13 @@ std::unique_ptr<URLRequestContext> URLRequestContextBuilder::Build() {
     url_request_job_factory_ = std::make_unique<URLRequestJobFactory>();
   context->set_job_factory(std::move(url_request_job_factory_));
 
-  std::unique_ptr<HttpNetworkSession> session =
+  network_session_ =
       std::make_unique<HttpNetworkSession>();
-  SetHttpNetworkSessionComponents(session.get(), context.get());
-
+  SetHttpNetworkSessionComponents(network_session_.get(), context.get());
 
   if (http_transaction_factory_ == nullptr) {
     std::unique_ptr<HttpTransactionFactory> network_layer =
-        std::make_unique<HttpNetworkLayer>(session.get());
+        std::make_unique<HttpNetworkLayer>(network_session_.get());
     http_transaction_factory_ = std::make_unique<HttpCache>(
         std::move(network_layer));
   }

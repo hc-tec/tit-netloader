@@ -44,6 +44,8 @@ class URLRequestContextBuilder {
 
   NetworkContext* network_context_;
 
+  std::unique_ptr<HttpNetworkSession> network_session_;
+
   HostResolver* host_resolver_;
   ResourceScheduler* resource_scheduler_;
 

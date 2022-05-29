@@ -23,11 +23,17 @@ int HttpNetworkTransaction::Start(HttpRequestInfo *request_info) {
   request_info_ = request_info;
   HttpStreamFactory* stream_factory = session_->http_stream_factory();
 
-  std::unique_ptr<TransportClientSocket> socket = std::make_unique<TransportClientSocket>();
-  std::unique_ptr<ClientSocketHandle> handle;
+  std::unique_ptr<TransportClientSocket> socket =
+      std::make_unique<TransportClientSocket>();
+
+  std::unique_ptr<ClientSocketHandle> handle =
+      std::make_unique<ClientSocketHandle>();
+
   handle->SetSocket(std::move(socket));
   stream_ = stream_factory->RequestStream(std::move(handle), request_info);
   stream_->SendRequest(&response_info_);
+  stream_->ReadResponseHeaders();
+  stream_->ReadResponseBody();
   return OK;
 }
 

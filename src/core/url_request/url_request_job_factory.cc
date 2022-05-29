@@ -7,6 +7,7 @@
 #include "core/base/url/url_constants.h"
 #include "core/url_request/url_request.h"
 #include "core/url_request/url_request_job.h"
+#include "core/url_request/url_request_http_job.h"
 #include "log/logging.h"
 
 namespace tit {
@@ -47,7 +48,7 @@ std::unique_ptr<URLRequestJob> URLRequestJobFactory::CreateJob(
 
 std::unique_ptr<URLRequestJob> HttpProtocolHandler::CreateJob(
     URLRequest *request) const {
-  return std::unique_ptr<URLRequestJob>();
+  return std::make_unique<URLRequestHttpJob>(request);
 }
 
 }  // namespace net

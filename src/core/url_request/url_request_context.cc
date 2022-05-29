@@ -25,7 +25,6 @@ std::unique_ptr<URLRequest> URLRequestContext::CreateURLRequest(
                                       this);
 
   url_request_ = url_request.get();
-
   return url_request;
 }
 

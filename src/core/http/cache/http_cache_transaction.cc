@@ -14,6 +14,7 @@ HttpCacheTransaction::HttpCacheTransaction(HttpCache *cache)
     : cache_(cache) {}
 
 int HttpCacheTransaction::Start(HttpRequestInfo *request_info) {
+  request_info_ = request_info;
   DoPrepareCache();
   DoSendRequest();
   DoReadResponse();
