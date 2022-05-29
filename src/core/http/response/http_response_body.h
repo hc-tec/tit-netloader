@@ -8,8 +8,10 @@
 #include <string>
 
 #include <co/def.h>
+#include <memory>
 
 #include "core/base/io_buffer.h"
+#include "log/log_stream.h"
 
 namespace tit {
 namespace net {
@@ -25,6 +27,8 @@ class HttpResponseBody {
 
   virtual size_t GetSize() = 0;
 
+  // for testing
+  virtual std::string ToString() = 0;
 };
 
 class HttpResponseBufferBody :
@@ -37,7 +41,11 @@ class HttpResponseBufferBody :
   size_t Read(std::string_view*, size_t buf_size) override;
   size_t Buffer(char*, size_t buf_size) override;
   size_t GetSize() override;
+  std::string ToString() override;
 };
+
+log::LogStream& operator<<(log::LogStream& stream,
+                           std::shared_ptr<HttpResponseBody> body);
 
 }  // namespace net
 }  // namespace tit

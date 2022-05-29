@@ -31,9 +31,13 @@ int HttpNetworkTransaction::Start(HttpRequestInfo *request_info) {
 
   handle->SetSocket(std::move(socket));
   stream_ = stream_factory->RequestStream(std::move(handle), request_info);
-  stream_->SendRequest(&response_info_);
-  stream_->ReadResponseHeaders();
-  stream_->ReadResponseBody();
+  int rv = stream_->SendRequest(&response_info_);
+  if (rv != OK) return rv;
+  rv = stream_->ReadResponseHeaders();
+  if (rv != OK) return rv;
+  rv = stream_->ReadResponseBody();
+  if (rv != OK) return rv;
+  LOG(INFO) << "Receive Response: " << response_info_;
   return OK;
 }
 

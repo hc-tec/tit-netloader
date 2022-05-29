@@ -5,6 +5,7 @@
 #include "http_request_info.h"
 
 #include "core/socket/tcp/address.h"
+#include "core/http/request/http_request_body.h"
 
 namespace tit {
 namespace net {
@@ -61,6 +62,20 @@ std::string HttpRequestInfo::GenerateRequestLine() {
 
 void HttpRequestInfo::SetAddressByUrl() {
   address = IPv4Address::Create(url.host().data(), url.port());
+}
+
+log::LogStream& operator<<(log::LogStream& stream, HttpRequestInfo* request) {
+    return stream << *request;
+}
+
+log::LogStream& operator<<(log::LogStream& stream, HttpRequestInfo request) {
+  stream << "\n------Request------\n"
+         << MethodToString(request.method) << " "
+         << request.url
+         << "\n------HEADERS------\n" << request.headers;
+  stream << "------BODY------\n";
+  if (request.body) stream << request.body;
+  stream << "\n";
 }
 
 }  // namespace net

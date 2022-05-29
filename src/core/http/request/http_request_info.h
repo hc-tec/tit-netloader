@@ -9,9 +9,10 @@
 #include <string>
 
 #include "core/base/url/url.h"
+#include "core/socket/tcp/address.h"
 #include "http_request_body.h"
 #include "http_request_headers.h"
-#include "core/socket/tcp/address.h"
+#include "log/log_stream.h"
 
 namespace tit {
 namespace net {
@@ -48,6 +49,10 @@ struct HttpRequestInfo {
   std::shared_ptr<HttpRequestBody> body;
 
 };
+
+log::LogStream& operator<<(log::LogStream& stream, HttpRequestInfo* request);
+
+log::LogStream& operator<<(log::LogStream& stream, HttpRequestInfo request);
 
 }  // namespace net
 }  // namespace tit

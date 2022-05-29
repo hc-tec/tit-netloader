@@ -10,23 +10,29 @@
 #include "core/http/response/http_response_headers.h"
 #include "core/http/response/http_response_body.h"
 #include "core/socket/tcp/address.h"
+#include "core/http/http_status.h"
+#include "log/log_stream.h"
 
 namespace tit {
 namespace net {
 
 struct HttpResponseInfo {
 
-  IOBuffer buffer;
+  HttpStatus status;
 
   URL url;
 
   Address::Ptr address;
+
+  IOBuffer buffer;
 
   HttpResponseHeaders headers;
 
   std::shared_ptr<HttpResponseBody> body;
 
 };
+
+log::LogStream& operator<<(log::LogStream& stream, HttpResponseInfo response);
 
 }  // namespace net
 }  // namespace tit

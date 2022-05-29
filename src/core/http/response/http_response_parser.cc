@@ -11,6 +11,7 @@
 
 #include <string>
 
+#include "core/http/http_status.h"
 #include "core/http/response/http_response_info.h"
 #include "log/logging.h"
 
@@ -52,7 +53,10 @@ int message_begin_cb(http_parser* p)
 int response_status_cb(http_parser* p, const char* buf, size_t len)
 {
   HttpResponseParser* parser = static_cast<HttpResponseParser*>(p->data);
-  LOG(TRACE) << "response status: " << p->status_code << std::string(buf, len);
+  parser->response_info()->status = HttpStatus::HttpStatusMap[p->status_code];
+  LOG(TRACE) << "response status: "
+             << p->status_code << " "
+             << std::string(buf, len);
   return 0;
 }
 

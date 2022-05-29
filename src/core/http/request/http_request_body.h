@@ -6,9 +6,11 @@
 #define TIT_NETLOADER_HTTP_REQUEST_BODY_H
 
 #include <map>
+#include <memory>
 #include <string>
 
 #include "http_request_headers.h"
+#include "log/log_stream.h"
 
 namespace tit {
 namespace net {
@@ -39,6 +41,9 @@ class HttpRequestBufferBody : public HttpRequestBody {
   std::string content_type_;
   std::string buffer_;
 };
+
+log::LogStream& operator<<(log::LogStream& stream,
+                           std::shared_ptr<HttpRequestBody> body);
 
 }  // namespace net
 }  // namespace tit

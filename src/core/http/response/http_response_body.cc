@@ -26,5 +26,14 @@ size_t HttpResponseBufferBody::Read(std::string_view* buf, size_t buf_size) {
   return this->IOBuffer::Read(buf, buf_size);
 }
 
+std::string HttpResponseBufferBody::ToString() {
+  return buffer_.empty() ? "" : buffer_;
+}
+
+log::LogStream& operator<<(log::LogStream& stream,
+                           std::shared_ptr<HttpResponseBody> body) {
+  stream << body->ToString();
+}
+
 }  // namespace net
 }  // namespace tit

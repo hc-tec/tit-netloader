@@ -20,5 +20,10 @@ void HttpRequestBufferBody::DeclareHeaders(HttpRequestHeaders& headers) {
   }
 }
 
+log::LogStream& operator<<(log::LogStream& stream,
+                           std::shared_ptr<HttpRequestBody> body) {
+    stream << body->ToString();
+}
+
 }  // namespace net
 }  // namespace tit
