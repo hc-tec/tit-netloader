@@ -32,7 +32,6 @@ class ClientSocketHandle {
 
  private:
   std::unique_ptr<StreamSocket> socket_;
-
 };
 
 }  // namespace net

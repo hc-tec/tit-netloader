@@ -14,21 +14,31 @@ using namespace tit;
 
 int main() {
   go([]() {
-    net::Address::Ptr address =
-        net::IPv4Address::Create("148.70.204.53", 3001);
+
     net::NetworkService* service = net::GetNetworkService();
     net::RequestParams params;
-    params.request_info.method = net::Method::GET;
-    params.request_info.address = std::move(address);
+    params.request_info.url = net::URL("http://148.70.204.53:3001/signin/");
+    params.request_info.method = net::Method::POST;
+    params.request_info.SetAddressByUrl();
+    net::HttpRequestHeaders& headers = params.request_info.headers;
+    headers.PutHeaders(net::HttpRequestHeaders::ACCEPT_ENCODING,
+                       "gzip, deflate");
+    headers.PutHeaders(net::HttpRequestHeaders::ACCEPT,
+                       "application/json, text/plain, */*");
+    headers.PutHeaders(net::HttpRequestHeaders::CONNECTION,
+                       net::HttpRequestHeaders::Value::CONNECTION_UPGRADE);
+    headers.PutHeaders(net::HttpRequestHeaders::ACCEPT_ENCODING,
+                       "gzip, deflate");
+    headers.PutHeaders(net::HttpRequestHeaders::HOST,
+                       params.request_info.url.host() + ":" + std::to_string(params.request_info.url.port()));
+    headers.PutHeaders(net::HttpRequestHeaders::USER_AGENT,
+                       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.53");
     params.request_info.body = std::make_shared<net::HttpRequestBufferBody>(
-        "", "123"
-        );
+        "application/json;charset=UTF-8",
+        "{\"username\":\"15270949466\",\"password\":\"yigeren1.\"}");
     std::unique_ptr<net::URLLoader> loader = service->CreateURLLoader(params);
     loader->Start();
-
-    co::sleep(1000);
-    std::cout << "run coroutine" << std::endl;
   });
   std::cout << "hello " << std::endl;
-  co::sleep(1500);
+  co::sleep(10000);
 }

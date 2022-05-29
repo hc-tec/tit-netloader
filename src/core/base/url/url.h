@@ -7,22 +7,34 @@
 
 #include <string>
 
+#include <co/def.h>
+
 namespace tit {
 namespace net {
 
 class URL {
  public:
+
   URL();
 
   URL(std::string url);
 
+  const std::string& origin_url() { return origin_url_; }
+
   const std::string& scheme() { return scheme_; }
 
-  const std::string& path() { return "/"; }
+  const std::string& host() { return host_; }
+
+  uint32 port() const { return port_; }
+
+  const std::string& path() { return path_; }
 
  private:
-  std::string scheme_;
   std::string origin_url_;
+  std::string scheme_;
+  std::string host_;
+  uint32 port_;
+  std::string path_;
 };
 
 }  // namespace net

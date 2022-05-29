@@ -32,7 +32,7 @@ URLLoader::URLLoader(uint64 request_id,
   url_request_ = url_request_context_->CreateURLRequest(request_params.request_info.url,
                                          request_params.priority,
                                          this);
-  
+  url_request_->set_request_info(request_params.request_info);
 }
 
 
