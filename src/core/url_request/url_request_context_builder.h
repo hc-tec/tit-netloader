@@ -28,8 +28,8 @@ class URLRequestContextBuilder {
 
   std::unique_ptr<URLRequestContext> Build();
 
-  void set_job_factory(std::unique_ptr<URLRequestJobFactory> job_factory) {
-    url_request_job_factory_ = std::move(job_factory);
+  void set_job_factory(URLRequestJobFactory* job_factory) {
+    url_request_job_factory_ = job_factory;
   }
 
   void set_transaction_factory(
@@ -48,8 +48,8 @@ class URLRequestContextBuilder {
 
   HostResolver* host_resolver_;
   ResourceScheduler* resource_scheduler_;
+  URLRequestJobFactory* url_request_job_factory_;
 
-  std::unique_ptr<URLRequestJobFactory> url_request_job_factory_;
   std::unique_ptr<HttpTransactionFactory> http_transaction_factory_;
 };
 

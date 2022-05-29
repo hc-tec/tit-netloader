@@ -8,6 +8,8 @@
 #include <memory>
 #include <vector>
 
+#include "core/url_request/url_request_job_factory.h"
+
 namespace tit {
 namespace net {
 
@@ -16,6 +18,7 @@ class NetworkService;
 class ResourceScheduler;
 class RequestParams;
 class URLLoaderInterceptor;
+class URLRequestJobFactory;
 
 class NetworkContext {
  public:
@@ -24,6 +27,7 @@ class NetworkContext {
 
   HostResolver* host_resolver() { return host_resolver_.get(); }
   ResourceScheduler* resource_scheduler() { return resource_scheduler_.get(); }
+  URLRequestJobFactory* job_factory() { return url_request_job_factory_.get(); }
 
   void AddURLLoaderInterceptor(
       std::shared_ptr<URLLoaderInterceptor> interceptor);
@@ -34,11 +38,16 @@ class NetworkContext {
   bool URLLoaderIntercept(NetworkService* service,
                           RequestParams* params);
 
+  bool SetProtocolHandler(const std::string& scheme,
+                          std::unique_ptr<URLRequestJobFactory::ProtocolHandler>
+                              protocol_handler);
+
  private:
   std::unique_ptr<HostResolver> host_resolver_;
   std::unique_ptr<ResourceScheduler> resource_scheduler_;
+  std::unique_ptr<URLRequestJobFactory> url_request_job_factory_;
 
-  std::vector<std::shared_ptr<URLLoaderInterceptor>> url_loader_interceptors;
+  std::vector<std::shared_ptr<URLLoaderInterceptor>> url_loader_interceptors_;
 };
 
 

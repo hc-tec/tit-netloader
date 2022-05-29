@@ -7,28 +7,28 @@
 #include "core/network/host_resolver.h"
 #include "core/network/resource_scheduler.h"
 #include "core/url_loader/url_loader_interceptor.h"
-
+#include "core/url_request/url_request_job_factory.h"
 
 namespace tit {
 namespace net {
 
-NetworkContext::NetworkContext() {}
+NetworkContext::NetworkContext()
+    : url_request_job_factory_(std::make_unique<URLRequestJobFactory>()) {}
+
 NetworkContext::~NetworkContext() {}
 
 void NetworkContext::AddURLLoaderInterceptor(
     std::shared_ptr<URLLoaderInterceptor> interceptor) {
-  url_loader_interceptors.push_back(interceptor);
+  url_loader_interceptors_.push_back(interceptor);
 }
 
 void NetworkContext::RemoveURLLoaderInterceptor(
     std::shared_ptr<URLLoaderInterceptor> interceptor) {
-  int size = url_loader_interceptors.size();
-//  int index = -1;
+  int size = url_loader_interceptors_.size();
   for (int i = 0; i < size; ++i) {
-    if (typeid(url_loader_interceptors[i]) == typeid(interceptor)) {
-//      index = i;
-      url_loader_interceptors.erase(
-          url_loader_interceptors.begin() + i);
+    if (typeid(url_loader_interceptors_[i]) == typeid(interceptor)) {
+      url_loader_interceptors_.erase(
+          url_loader_interceptors_.begin() + i);
       break;
     }
   }
@@ -36,10 +36,17 @@ void NetworkContext::RemoveURLLoaderInterceptor(
 
 bool NetworkContext::URLLoaderIntercept(NetworkService* service,
                                         RequestParams* params) {
-  for (auto& interceptor : url_loader_interceptors) {
+  for (auto& interceptor : url_loader_interceptors_) {
     if (!interceptor->Interceptor(service, params)) return false;
   }
   return true;
+}
+
+bool NetworkContext::SetProtocolHandler(
+    const std::string& scheme,
+    std::unique_ptr<URLRequestJobFactory::ProtocolHandler> protocol_handler) {
+  return url_request_job_factory_->SetProtocolHandler(
+      scheme, std::move(protocol_handler));
 }
 
 }  // namespace net

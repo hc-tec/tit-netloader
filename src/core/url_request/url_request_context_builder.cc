@@ -29,8 +29,8 @@ std::unique_ptr<URLRequestContext> URLRequestContextBuilder::Build() {
       network_context_->resource_scheduler());
 
   if (url_request_job_factory_ == nullptr)
-    url_request_job_factory_ = std::make_unique<URLRequestJobFactory>();
-  context->set_job_factory(std::move(url_request_job_factory_));
+    url_request_job_factory_ = network_context_->job_factory();
+  context->set_job_factory(url_request_job_factory_);
 
   network_session_ =
       std::make_unique<HttpNetworkSession>();

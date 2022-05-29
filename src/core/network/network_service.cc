@@ -54,6 +54,13 @@ void NetworkService::RemoveURLLoaderInterceptor(
   network_context_->RemoveURLLoaderInterceptor(interceptor);
 }
 
+bool NetworkService::SetProtocolHandler(
+    const std::string& scheme,
+    std::unique_ptr<URLRequestJobFactory::ProtocolHandler> protocol_handler) {
+  return network_context_->SetProtocolHandler(
+      scheme, std::move(protocol_handler));
+}
+
 NetworkService* GetNetworkService() {
   static NetworkService service;
   return &service;

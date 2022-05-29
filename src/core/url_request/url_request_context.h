@@ -39,9 +39,9 @@ class URLRequestContext {
     url_request_ = url_request;
   }
 
-  URLRequestJobFactory* job_factory() { return url_request_job_factory_.get(); }
-  void set_job_factory(std::unique_ptr<URLRequestJobFactory> job_factory) {
-    url_request_job_factory_ = std::move(job_factory);
+  URLRequestJobFactory* job_factory() { return url_request_job_factory_; }
+  void set_job_factory(URLRequestJobFactory* job_factory) {
+    url_request_job_factory_ = job_factory;
   }
 
   HttpTransactionFactory* transaction_factory() {
@@ -57,10 +57,11 @@ class URLRequestContext {
 
   HostResolver* host_resolver_;
   ResourceScheduler* resource_scheduler_;
+  URLRequestJobFactory* url_request_job_factory_;
 
   URLRequest* url_request_;
 
-  std::unique_ptr<URLRequestJobFactory> url_request_job_factory_;
+
   std::unique_ptr<HttpTransactionFactory> http_transaction_factory_;
 };
 

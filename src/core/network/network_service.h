@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "core/url_loader/url_loader.h"
+#include "core/url_request/url_request_job_factory.h"
 
 namespace tit {
 namespace net {
@@ -33,6 +34,10 @@ class NetworkService : public URLLoader::Delegate {
 
   void RemoveURLLoaderInterceptor(
       std::shared_ptr<URLLoaderInterceptor> interceptor);
+
+  bool SetProtocolHandler(const std::string& scheme,
+                          std::unique_ptr<URLRequestJobFactory::ProtocolHandler>
+                          protocol_handler);
 
  private:
   friend URLLoaderInterceptor;
