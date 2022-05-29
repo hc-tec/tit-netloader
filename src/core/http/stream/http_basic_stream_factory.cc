@@ -19,9 +19,10 @@ HttpBasicStreamFactory::~HttpBasicStreamFactory() {}
 
 std::unique_ptr<HttpStream> HttpBasicStreamFactory::RequestStream(
     std::unique_ptr<ClientSocketHandle> connection,
-    HttpRequestInfo *request_info) {
+    HttpRequestInfo *request_info,
+    HttpStream::Delegate* delegate) {
   std::unique_ptr<HttpBasicStream> stream = std::make_unique<HttpBasicStream>(
-      std::move(connection), false
+      std::move(connection), false, delegate
       );
   stream->InitializeStream();
   stream->RegisterRequest(request_info);

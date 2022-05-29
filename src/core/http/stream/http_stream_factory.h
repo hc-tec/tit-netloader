@@ -7,6 +7,8 @@
 
 #include <memory>
 
+#include "core/http/stream/http_stream.h"
+
 namespace tit {
 namespace net {
 
@@ -23,7 +25,8 @@ class HttpStreamFactory {
 
   virtual std::unique_ptr<HttpStream> RequestStream(
       std::unique_ptr<ClientSocketHandle> connection,
-      HttpRequestInfo* request_info) = 0;
+      HttpRequestInfo* request_info,
+      HttpStream::Delegate* delegate) = 0;
 
  private:
   HttpNetworkSession* session_;

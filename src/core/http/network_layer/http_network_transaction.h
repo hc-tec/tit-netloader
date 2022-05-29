@@ -9,14 +9,16 @@
 
 #include "core/http/http_transaction.h"
 #include "core/http/response/http_response_info.h"
+#include "core/http/stream/http_stream.h"
 
 namespace tit {
 namespace net {
 
 class HttpNetworkSession;
-class HttpStream;
 
-class HttpNetworkTransaction : public HttpTransaction {
+class HttpNetworkTransaction :
+    public HttpTransaction,
+    public HttpStream::Delegate {
  public:
   explicit HttpNetworkTransaction(HttpNetworkSession* session);
   ~HttpNetworkTransaction() override;
@@ -24,6 +26,9 @@ class HttpNetworkTransaction : public HttpTransaction {
   int Start(HttpRequestInfo *request_info) override;
   int Restart() override;
   const HttpResponseInfo *GetResponseInfo() const override;
+
+  // HttpStream::Delegate
+  void OnConnected() override;
 
  private:
   HttpNetworkSession* session_;

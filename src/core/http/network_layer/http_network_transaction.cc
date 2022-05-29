@@ -30,7 +30,9 @@ int HttpNetworkTransaction::Start(HttpRequestInfo *request_info) {
       std::make_unique<ClientSocketHandle>();
 
   handle->SetSocket(std::move(socket));
-  stream_ = stream_factory->RequestStream(std::move(handle), request_info);
+  stream_ = stream_factory->RequestStream(std::move(handle),
+                                          request_info,
+                                          this);
   int rv = stream_->SendRequest(&response_info_);
   if (rv != OK) return rv;
   rv = stream_->ReadResponseHeaders();
@@ -45,6 +47,10 @@ int HttpNetworkTransaction::Restart() { return 0; }
 
 const HttpResponseInfo *HttpNetworkTransaction::GetResponseInfo() const {
   return &response_info_;
+}
+
+void HttpNetworkTransaction::OnConnected() {
+  LOG(INFO) << "Connected";
 }
 
 }  // namespace net

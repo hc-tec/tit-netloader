@@ -16,8 +16,10 @@ namespace tit {
 namespace net {
 
 HttpBasicStream::HttpBasicStream(std::unique_ptr<ClientSocketHandle> connection,
-                                 bool using_proxy)
-    : using_proxy_(using_proxy),
+                                 bool using_proxy,
+                                 HttpStream::Delegate* delegate)
+    : delegate_(delegate),
+      using_proxy_(using_proxy),
       connection_(std::move(connection)),
       response_parser_(std::make_unique<HttpResponseParser>()) {
 
@@ -48,6 +50,7 @@ int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
   if (!connected) {
     return ERR_CONNECTION_FAILED;
   }
+  delegate_->OnConnected();
   connection_->socket()->Write(request.data(), request.size());
   return OK;
 }

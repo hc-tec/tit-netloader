@@ -21,7 +21,8 @@ class ClientSocketHandle;
 class HttpBasicStream : public HttpStream {
  public:
   HttpBasicStream(std::unique_ptr<ClientSocketHandle> connection,
-                  bool using_proxy);
+                  bool using_proxy,
+                  HttpStream::Delegate* delegate);
 
   HttpBasicStream(const HttpBasicStream&) = delete;
   HttpBasicStream& operator=(const HttpBasicStream&) = delete;
@@ -36,6 +37,9 @@ class HttpBasicStream : public HttpStream {
   void Close() override;
 
  private:
+
+  HttpStream::Delegate* delegate_;
+
   bool using_proxy_;
   std::unique_ptr<ClientSocketHandle> connection_;
   std::string read_buf_;

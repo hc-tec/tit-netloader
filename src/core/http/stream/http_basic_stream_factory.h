@@ -5,6 +5,7 @@
 #ifndef TIT_NETLOADER_HTTP_BASIC_STREAM_FACTORY_H
 #define TIT_NETLOADER_HTTP_BASIC_STREAM_FACTORY_H
 
+#include "core/http/stream/http_stream.h"
 #include "core/http/stream/http_stream_factory.h"
 
 namespace tit {
@@ -19,7 +20,8 @@ class HttpBasicStreamFactory : public HttpStreamFactory {
 
   std::unique_ptr<HttpStream> RequestStream(
       std::unique_ptr<ClientSocketHandle> connection,
-      HttpRequestInfo *request_info
+      HttpRequestInfo *request_info,
+      HttpStream::Delegate* delegate
       ) override;
 };
 

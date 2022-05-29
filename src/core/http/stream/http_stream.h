@@ -13,6 +13,14 @@ struct HttpResponseInfo;
 
 class HttpStream {
  public:
+
+  class Delegate {
+   public:
+    virtual ~Delegate() = default;
+
+    virtual void OnConnected() = 0;
+  };
+
   virtual ~HttpStream() {}
 
   virtual void RegisterRequest(HttpRequestInfo* request_info) = 0;
