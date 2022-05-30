@@ -5,13 +5,16 @@
 #include "http_network_transaction.h"
 
 #include "core/base/net_error.h"
-#include "core/http/stream/http_stream.h"
-#include "core/http/stream/http_stream_factory.h"
+#include "core/http/http_request_observer.h"
+#include "core/http/http_transaction_factory.h"
 #include "core/http/network_layer/http_network_session.h"
+#include "core/http/stream/http_stream_factory.h"
+#include "core/network/host_resolver.h"
 #include "core/network/network_context.h"
-#include "core/socket/tcp/transport_client_socket.h"
+#include "core/network/resource_scheduler.h"
 #include "core/socket/client_socket_handle.h"
-#include "core/url_request/url_request_observer.h"
+#include "core/socket/tcp/transport_client_socket.h"
+#include "core/url_request/url_request_context_builder.h"
 
 namespace tit {
 namespace net {
