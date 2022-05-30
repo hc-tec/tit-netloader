@@ -19,9 +19,8 @@ int main() {
 
     net::NetworkService* service = net::GetNetworkService();
     net::RequestParams params;
-    params.request_info.url = net::URL("http://148.70.204.53:3001/signin/");
+    params.request_info.url = net::URL("http://baidu.com");
     params.request_info.method = net::Method::POST;
-    params.request_info.SetAddressByUrl();
     net::HttpRequestHeaders& headers = params.request_info.headers;
 
     headers.PutHeaders(net::HttpHeaders::ACCEPT_ENCODING,
@@ -39,7 +38,7 @@ int main() {
                        "tit net loader" TIT_NET_LOADER_VERSION);
     params.request_info.body = std::make_shared<net::HttpRequestBufferBody>(
         "application/json;charset=UTF-8",
-        "{\"username\":\"15270949466\",\"password\":\"yigeren1.\"}");
+        "{\"username\":\"152709494\",\"password\":\"yigeren\"}");
     std::unique_ptr<net::URLLoader> loader = service->CreateURLLoader(params);
     loader->Start();
   });
