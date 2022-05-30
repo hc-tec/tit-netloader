@@ -51,7 +51,7 @@ void URLRequestContextBuilder::SetHttpNetworkSessionComponents(
     HttpNetworkSession *session,
     URLRequestContext *request_context) {
   session->host_resolver_ = network_context_->host_resolver();
-
+  session->network_context_ = network_context_;
 }
 
 }  // namespace net

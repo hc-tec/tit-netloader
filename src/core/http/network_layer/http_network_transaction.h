@@ -28,7 +28,13 @@ class HttpNetworkTransaction :
   const HttpResponseInfo *GetResponseInfo() const override;
 
   // HttpStream::Delegate
-  void OnConnected() override;
+  void OnConnected(HttpRequestInfo* request_info) override;
+  void OnBeforeRequest(HttpRequestInfo *request_info,
+                       std::string &request_msg) override;
+  void OnResponseHeaderReceived(HttpResponseInfo *response_info,
+                                std::string raw_response) override;
+  void OnResponseBodyReceived(HttpResponseInfo *response_info,
+                              std::string raw_response) override;
 
  private:
   HttpNetworkSession* session_;

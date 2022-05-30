@@ -8,8 +8,10 @@
 #include "core/http/stream/http_stream.h"
 #include "core/http/stream/http_stream_factory.h"
 #include "core/http/network_layer/http_network_session.h"
+#include "core/network/network_context.h"
 #include "core/socket/tcp/transport_client_socket.h"
 #include "core/socket/client_socket_handle.h"
+#include "core/url_request/url_request_observer.h"
 
 namespace tit {
 namespace net {
@@ -49,8 +51,55 @@ const HttpResponseInfo *HttpNetworkTransaction::GetResponseInfo() const {
   return &response_info_;
 }
 
-void HttpNetworkTransaction::OnConnected() {
-  LOG(INFO) << "Connected";
+void HttpNetworkTransaction::OnConnected(HttpRequestInfo* request_info) {
+  LOG(INFO) << "OnConnected";
+  auto& observers = session_->network_context()->url_request_observers_;
+  for (auto& observer : observers) {
+    auto observer_share = observer.lock();
+    if (observer_share.use_count()) {
+      observer_share->OnConnected(session_, request_info);
+    }
+  }
+}
+
+void HttpNetworkTransaction::OnBeforeRequest(HttpRequestInfo *request_info,
+                                             std::string &request_msg) {
+  LOG(INFO) << "OnBeforeRequest";
+  auto& observers = session_->network_context()->url_request_observers_;
+  for (auto& observer : observers) {
+    auto observer_share = observer.lock();
+    if (observer_share.use_count()) {
+      observer_share->OnBeforeRequest(session_, request_info, request_msg);
+    }
+  }
+}
+
+void HttpNetworkTransaction::OnResponseHeaderReceived(
+    HttpResponseInfo *response_info, std::string raw_response) {
+  LOG(INFO) << "OnResponseHeaderReceived";
+  auto& observers = session_->network_context()->url_request_observers_;
+  for (auto& observer : observers) {
+    auto observer_share = observer.lock();
+    if (observer_share.use_count()) {
+      observer_share->OnResponseHeaderReceived(session_,
+                                               response_info,
+                                               raw_response);
+    }
+  }
+}
+
+void HttpNetworkTransaction::OnResponseBodyReceived(
+    HttpResponseInfo *response_info, std::string raw_response) {
+  LOG(INFO) << "OnResponseBodyReceived";
+  auto& observers = session_->network_context()->url_request_observers_;
+  for (auto& observer : observers) {
+    auto observer_share = observer.lock();
+    if (observer_share.use_count()) {
+      observer_share->OnResponseBodyReceived(session_,
+                                             response_info,
+                                             raw_response);
+    }
+  }
 }
 
 }  // namespace net

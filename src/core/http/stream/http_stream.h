@@ -5,6 +5,8 @@
 #ifndef TIT_NETLOADER_HTTP_STREAM_H
 #define TIT_NETLOADER_HTTP_STREAM_H
 
+#include <string>
+
 namespace tit {
 namespace net {
 
@@ -18,7 +20,13 @@ class HttpStream {
    public:
     virtual ~Delegate() = default;
 
-    virtual void OnConnected() = 0;
+    virtual void OnConnected(HttpRequestInfo* request_info) = 0;
+    virtual void OnBeforeRequest(HttpRequestInfo* request_info,
+                                 std::string& request_msg) = 0;
+    virtual void OnResponseHeaderReceived(HttpResponseInfo* response_info,
+                                          std::string raw_response) = 0;
+    virtual void OnResponseBodyReceived(HttpResponseInfo* response_info,
+                                          std::string raw_response) = 0;
   };
 
   virtual ~HttpStream() {}

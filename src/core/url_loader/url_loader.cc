@@ -7,10 +7,10 @@
 #include "core/http/http_transaction_factory.h"
 #include "core/network/host_resolver.h"
 #include "core/network/network_context.h"
+#include "core/network/request_params.h"
 #include "core/network/resource_scheduler.h"
-#include "core/url_loader/request_params.h"
-#include "core/url_request/url_request.h"
 #include "core/url_request//url_request_context.h"
+#include "core/url_request/url_request.h"
 #include "core/url_request/url_request_context_builder.h"
 #include "core/url_request/url_request_job_factory.h"
 

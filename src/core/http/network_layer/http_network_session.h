@@ -13,12 +13,15 @@ namespace net {
 class ClientSocketPoolManager;
 class HostResolver;
 class HttpStreamFactory;
+class NetworkContext;
 class URLRequestContextBuilder;
 
 class HttpNetworkSession {
  public:
   HttpNetworkSession();
   ~HttpNetworkSession();
+
+  NetworkContext* network_context() { return network_context_; }
 
   HostResolver* host_resolver() { return host_resolver_; }
 
@@ -28,6 +31,8 @@ class HttpNetworkSession {
 
  private:
   friend URLRequestContextBuilder;
+
+  NetworkContext* network_context_;
 
   HostResolver* host_resolver_;
 

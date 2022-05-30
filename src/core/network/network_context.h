@@ -14,11 +14,13 @@ namespace tit {
 namespace net {
 
 class HostResolver;
+class HttpNetworkTransaction;
 class NetworkService;
 class ResourceScheduler;
 class RequestParams;
 class URLLoaderInterceptor;
 class URLRequestJobFactory;
+class URLRequestObserver;
 
 class NetworkContext {
  public:
@@ -42,12 +44,26 @@ class NetworkContext {
                           std::unique_ptr<URLRequestJobFactory::ProtocolHandler>
                               protocol_handler);
 
+  void AddURLRequestObserver(
+      std::weak_ptr<URLRequestObserver> observer);
+
+  void RemoveURLRequestObserver(
+      std::weak_ptr<URLRequestObserver> observer);
+
+//  const std::vector<std::weak_ptr<URLRequestObserver>>&
+//  url_request_observers() {
+//    return url_request_observers_;
+//  }
+
  private:
+  friend HttpNetworkTransaction;
+
   std::unique_ptr<HostResolver> host_resolver_;
   std::unique_ptr<ResourceScheduler> resource_scheduler_;
   std::unique_ptr<URLRequestJobFactory> url_request_job_factory_;
 
   std::vector<std::shared_ptr<URLLoaderInterceptor>> url_loader_interceptors_;
+  std::vector<std::weak_ptr<URLRequestObserver>> url_request_observers_;
 };
 
 

@@ -15,7 +15,7 @@ namespace net {
 class ClientSocketHandle;
 class HttpNetworkSession;
 class HttpStream;
-class HttpRequestInfo;
+struct HttpRequestInfo;
 
 class HttpStreamFactory {
  public:
