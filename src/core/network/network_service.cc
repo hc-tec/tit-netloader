@@ -4,11 +4,14 @@
 
 #include "network_service.h"
 
+#include "core/http/http_transaction_factory.h"
 #include "core/network/network_context.h"
 #include "core/network/request_manager.h"
+#include "core/network/request_params.h"
+#include "core/network/host_resolver.h"
+#include "core/network/resource_scheduler.h"
 #include "core/url_loader/url_loader_factory.h"
-#include "core/url_request/url_request.h"
-#include "request_params.h"
+#include "core/url_request/url_request_context_builder.h"
 
 namespace tit {
 namespace net {
@@ -61,14 +64,14 @@ bool NetworkService::SetProtocolHandler(
       scheme, std::move(protocol_handler));
 }
 
-void NetworkService::AddURLRequestObserver(
-    std::weak_ptr<URLRequestObserver> observer) {
-  network_context_->AddURLRequestObserver(observer);
+void NetworkService::AddHttpRequestObserver(
+    std::weak_ptr<HttpRequestObserver> observer) {
+  network_context_->AddHttpRequestObserver(observer);
 }
 
-void NetworkService::RemoveURLRequestObserver(
-    std::weak_ptr<URLRequestObserver> observer) {
-  network_context_->RemoveURLRequestObserver(observer);
+void NetworkService::RemoveHttpRequestObserver(
+    std::weak_ptr<HttpRequestObserver> observer) {
+  network_context_->RemoveHttpRequestObserver(observer);
 }
 
 NetworkService* GetNetworkService() {

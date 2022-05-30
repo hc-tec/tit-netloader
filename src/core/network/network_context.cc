@@ -4,16 +4,22 @@
 
 #include "network_context.h"
 
+#include "core/http/http_transaction_factory.h"
 #include "core/network/host_resolver.h"
 #include "core/network/resource_scheduler.h"
 #include "core/url_loader/url_loader_interceptor.h"
 #include "core/url_request/url_request_job_factory.h"
+#include "core/url_request/url_request_context_builder.h"
 
 namespace tit {
 namespace net {
 
 NetworkContext::NetworkContext()
-    : url_request_job_factory_(std::make_unique<URLRequestJobFactory>()) {}
+    : url_request_job_factory_(std::make_unique<URLRequestJobFactory>()),
+      url_request_context_builder_(
+          std::make_unique<URLRequestContextBuilder>(this)) {
+
+}
 
 NetworkContext::~NetworkContext() {}
 
@@ -49,13 +55,13 @@ bool NetworkContext::SetProtocolHandler(
       scheme, std::move(protocol_handler));
 }
 
-void NetworkContext::AddURLRequestObserver(
-    std::weak_ptr<URLRequestObserver> observer) {
+void NetworkContext::AddHttpRequestObserver(
+    std::weak_ptr<HttpRequestObserver> observer) {
   url_request_observers_.push_back(observer);
 }
 
-void NetworkContext::RemoveURLRequestObserver(
-    std::weak_ptr<URLRequestObserver> observer) {
+void NetworkContext::RemoveHttpRequestObserver(
+    std::weak_ptr<HttpRequestObserver> observer) {
   int size = url_request_observers_.size();
   for (int i = 0; i < size; ++i) {
     if (typeid(url_request_observers_[i]) == typeid(observer)) {

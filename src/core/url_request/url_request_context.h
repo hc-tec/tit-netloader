@@ -61,7 +61,6 @@ class URLRequestContext {
 
   URLRequest* url_request_;
 
-
   std::unique_ptr<HttpTransactionFactory> http_transaction_factory_;
 };
 

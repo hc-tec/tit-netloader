@@ -38,6 +38,10 @@ class URLLoader : public URLRequest::Delegate {
 
   void Start();
 
+  void set_url_request_context_builder(URLRequestContextBuilder* builder) {
+    url_request_context_builder_ = builder;
+  }
+
  private:
 
   uint64 request_id_;
@@ -45,8 +49,8 @@ class URLLoader : public URLRequest::Delegate {
 
   NetworkContext* network_context_;
   ResourceScheduler* resource_scheduler_;
+  URLRequestContextBuilder* url_request_context_builder_;
 
-  std::unique_ptr<URLRequestContextBuilder> url_request_context_builder_;
   std::unique_ptr<URLRequestContext> url_request_context_;
   std::unique_ptr<URLRequest> url_request_;
 

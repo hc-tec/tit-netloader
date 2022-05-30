@@ -19,13 +19,15 @@ class NetworkContext;
 class RequestManager;
 class URLLoaderFactory;
 class URLLoaderInterceptor;
-class URLRequestObserver;
+class HttpRequestObserver;
 
 class NetworkService : public URLLoader::Delegate {
  public:
 
   NetworkService();
   ~NetworkService();
+
+  NetworkContext* network_context() { return network_context_.get(); }
 
    std::unique_ptr<URLLoader> CreateURLLoader(
       RequestParams& request_params);
@@ -40,11 +42,11 @@ class NetworkService : public URLLoader::Delegate {
                           std::unique_ptr<URLRequestJobFactory::ProtocolHandler>
                           protocol_handler);
 
-  void AddURLRequestObserver(
-      std::weak_ptr<URLRequestObserver> observer);
+  void AddHttpRequestObserver(
+      std::weak_ptr<HttpRequestObserver> observer);
 
-  void RemoveURLRequestObserver(
-      std::weak_ptr<URLRequestObserver> observer);
+  void RemoveHttpRequestObserver(
+      std::weak_ptr<HttpRequestObserver> observer);
 
  private:
   friend URLLoaderInterceptor;

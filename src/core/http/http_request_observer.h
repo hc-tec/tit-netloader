@@ -2,8 +2,8 @@
 // Created by titto on 2022/5/30.
 //
 
-#ifndef TIT_NETLOADER_URL_REQUEST_OBSERVER_H
-#define TIT_NETLOADER_URL_REQUEST_OBSERVER_H
+#ifndef TIT_NETLOADER_HTTP_REQUEST_OBSERVER_H
+#define TIT_NETLOADER_HTTP_REQUEST_OBSERVER_H
 
 #include <string>
 
@@ -34,4 +34,4 @@ class URLRequestObserver {
 }  // namespace net
 }  // namespace tit
 
-#endif  // TIT_NETLOADER_URL_REQUEST_OBSERVER_H
+#endif  // TIT_NETLOADER_HTTP_REQUEST_OBSERVER_H

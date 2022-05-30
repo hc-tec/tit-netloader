@@ -26,10 +26,11 @@ URLLoader::URLLoader(uint64 request_id,
       network_context_(network_context),
       resource_scheduler_(network_context->resource_scheduler()),
       url_request_context_builder_(
-          std::make_unique<URLRequestContextBuilder>(network_context)) {
+          network_context_->url_request_context_builder()) {
 
   url_request_context_ = url_request_context_builder_->Build();
-  url_request_ = url_request_context_->CreateURLRequest(request_params.request_info.url,
+  url_request_ = url_request_context_->
+                 CreateURLRequest(request_params.request_info.url,
                                          request_params.priority,
                                          this);
   url_request_->set_request_info(request_params.request_info);
