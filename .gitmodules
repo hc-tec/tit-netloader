@@ -1,0 +1,6 @@
+[submodule "third_party/cocoyaxi"]
+	path = third_party/cocoyaxi
+	url = https://github.com/idealvin/cocoyaxi
+[submodule "third_party/http-parser"]
+	path = third_party/http-parser
+	url = https://github.com/nodejs/http-parser

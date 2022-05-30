@@ -1,12 +1,12 @@
 # net loader
 
 This is a project for learn, cause I plan to implement net stack of chromium.
-The project use [cocoyaxi](https://github.com/idealvin/cocoyaxi) as coroutine lib. So before you try the project,
-you need install cocoyaxi into your device first.
+
+The project use [cocoyaxi](https://github.com/idealvin/cocoyaxi) as coroutine lib.
 
 ## build
 ```c++
-git clone https://github.com/hc-tec/tit-netloader
+git clone https://github.com/hc-tec/tit-netloader --recursive
 cd tit-netloader
 
 cd third_party
