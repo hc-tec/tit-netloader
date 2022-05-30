@@ -30,12 +30,16 @@ class URL {
 
   const std::string& path() { return path_; }
 
+  bool is_ip() const { return is_ip_; }
+
  private:
   std::string origin_url_;
   std::string scheme_;
   std::string host_;
   uint32 port_;
   std::string path_;
+
+  bool is_ip_;
 };
 
 log::LogStream& operator<<(log::LogStream& stream, URL url);

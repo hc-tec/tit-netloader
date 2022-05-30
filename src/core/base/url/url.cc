@@ -19,7 +19,8 @@ URL::URL()
 
 URL::URL(std::string url)
     : origin_url_(std::move(url)),
-      path_("/") {
+      path_("/"),
+      is_ip_(false) {
   http_parser_url u;
   http_parser_url_init(&u);
   int rv = http_parser_parse_url(origin_url_.data(), origin_url_.size(), 0, &u);
@@ -32,6 +33,7 @@ URL::URL(std::string url)
   host_ = origin_url_.substr(data[UF_HOST].off, data[UF_HOST].len);
   port_ = atoi(origin_url_.substr(data[UF_PORT].off, data[UF_PORT].len).data());
   path_ = origin_url_.substr(data[UF_PATH].off, data[UF_PATH].len);
+  if (host_.size() > 1 && host_.at(0) < 65) is_ip_ = true;
 //  path_ = url.substr(data[UF_QUERY].off, data[UF_QUERY].len)
 
 //  TParseUrl parser(origin_url_.data());
