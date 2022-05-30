@@ -14,9 +14,9 @@ struct HttpRequestInfo;
 struct HttpResponseInfo;
 class HttpNetworkSession;
 
-class URLRequestObserver {
+class HttpRequestObserver {
  public:
-  virtual ~URLRequestObserver() = default;
+  virtual ~HttpRequestObserver() = default;
 
   virtual void OnConnected(HttpNetworkSession* session,
                            HttpRequestInfo* request_info) = 0;
