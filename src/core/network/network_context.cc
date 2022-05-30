@@ -15,7 +15,8 @@ namespace tit {
 namespace net {
 
 NetworkContext::NetworkContext()
-    : url_request_job_factory_(std::make_unique<URLRequestJobFactory>()),
+    : host_resolver_(std::make_unique<SimpleHostResolver>()),
+      url_request_job_factory_(std::make_unique<URLRequestJobFactory>()),
       url_request_context_builder_(
           std::make_unique<URLRequestContextBuilder>(this)) {
 

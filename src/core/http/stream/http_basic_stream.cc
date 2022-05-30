@@ -31,9 +31,12 @@ void HttpBasicStream::RegisterRequest(HttpRequestInfo *request_info) {
   request_info_ = request_info;
 }
 
-int HttpBasicStream::InitializeStream() { return 0; }
+int HttpBasicStream::InitializeStream() {
+
+}
 
 int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
+
   response_parser_->set_response(response_info);
   response_info_ = response_info;
   response_info_->url = request_info_->url;

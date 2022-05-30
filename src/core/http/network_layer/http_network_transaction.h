@@ -37,6 +37,9 @@ class HttpNetworkTransaction :
                               std::string raw_response) override;
 
  private:
+  bool NeedHostResolve();
+  void DoHostResolve();
+
   HttpNetworkSession* session_;
   HttpRequestInfo* request_info_;
 

@@ -8,6 +8,7 @@
 #include "core/http/http_request_observer.h"
 #include "core/http/http_transaction_factory.h"
 #include "core/http/network_layer/http_network_session.h"
+#include "core/http/request/http_request_info.h"
 #include "core/http/stream/http_stream_factory.h"
 #include "core/network/host_resolver.h"
 #include "core/network/network_context.h"
@@ -26,6 +27,7 @@ HttpNetworkTransaction::~HttpNetworkTransaction() {}
 
 int HttpNetworkTransaction::Start(HttpRequestInfo *request_info) {
   request_info_ = request_info;
+  DoHostResolve();
   HttpStreamFactory* stream_factory = session_->http_stream_factory();
 
   std::unique_ptr<TransportClientSocket> socket =
@@ -52,6 +54,18 @@ int HttpNetworkTransaction::Restart() { return 0; }
 
 const HttpResponseInfo *HttpNetworkTransaction::GetResponseInfo() const {
   return &response_info_;
+}
+
+bool HttpNetworkTransaction::NeedHostResolve() {
+  if (request_info_->url.is_ip()) return false;
+  return true;
+}
+
+void HttpNetworkTransaction::DoHostResolve() {
+  if (!NeedHostResolve()) return;
+  auto host_resolver = session_->host_resolver()->Create();
+  host_resolver->Start(request_info_->url);
+  request_info_->address = host_resolver->GetAddressResult();
 }
 
 void HttpNetworkTransaction::OnConnected(HttpRequestInfo* request_info) {
@@ -104,6 +118,8 @@ void HttpNetworkTransaction::OnResponseBodyReceived(
     }
   }
 }
+
+
 
 }  // namespace net
 }  // namespace tit
