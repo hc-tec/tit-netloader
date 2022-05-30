@@ -18,6 +18,14 @@ class HttpRequestObserver {
  public:
   virtual ~HttpRequestObserver() = default;
 
+  virtual void OnHostResolved(HttpNetworkSession* session,
+                           HttpRequestInfo* request_info,
+                              bool need_host_resolve,
+                              const std::string& dns_ip) = 0;
+
+  virtual void OnHostResolveError(HttpNetworkSession* session,
+                              HttpRequestInfo* request_info) = 0;
+
   virtual void OnConnected(HttpNetworkSession* session,
                            HttpRequestInfo* request_info) = 0;
   virtual void OnBeforeRequest(HttpNetworkSession* session,
@@ -25,10 +33,10 @@ class HttpRequestObserver {
                                std::string& request_msg) = 0;
   virtual void OnResponseHeaderReceived(HttpNetworkSession* session,
                                         HttpResponseInfo* response_info,
-                                        std::string raw_response) = 0;
+                                        const std::string& raw_response) = 0;
   virtual void OnResponseBodyReceived(HttpNetworkSession* session,
                                       HttpResponseInfo* response_info,
-                                      std::string raw_response) = 0;
+                                      const std::string& raw_response) = 0;
 };
 
 }  // namespace net

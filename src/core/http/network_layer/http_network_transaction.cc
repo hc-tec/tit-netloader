@@ -27,7 +27,8 @@ HttpNetworkTransaction::~HttpNetworkTransaction() {}
 
 int HttpNetworkTransaction::Start(HttpRequestInfo *request_info) {
   request_info_ = request_info;
-  DoHostResolve();
+  int rv = DoHostResolve();
+  if (rv != OK) return rv;
   HttpStreamFactory* stream_factory = session_->http_stream_factory();
 
   std::unique_ptr<TransportClientSocket> socket =
@@ -40,7 +41,7 @@ int HttpNetworkTransaction::Start(HttpRequestInfo *request_info) {
   stream_ = stream_factory->RequestStream(std::move(handle),
                                           request_info,
                                           this);
-  int rv = stream_->SendRequest(&response_info_);
+  rv = stream_->SendRequest(&response_info_);
   if (rv != OK) return rv;
   rv = stream_->ReadResponseHeaders();
   if (rv != OK) return rv;
@@ -61,11 +62,22 @@ bool HttpNetworkTransaction::NeedHostResolve() {
   return true;
 }
 
-void HttpNetworkTransaction::DoHostResolve() {
-  if (!NeedHostResolve()) return;
+int HttpNetworkTransaction::DoHostResolve() {
+  if (!NeedHostResolve()) {
+    OnHostResolved(request_info_, false,
+                   request_info_->address->ToString());
+    return OK;
+  }
   auto host_resolver = session_->host_resolver()->Create();
-  host_resolver->Start(request_info_->url);
+  int rv = host_resolver->Start(request_info_->url);
+  if (rv != 0) {
+    OnHostResolvedError(request_info_);
+    return rv;
+  }
   request_info_->address = host_resolver->GetAddressResult();
+  OnHostResolved(request_info_, true,
+                 request_info_->address->ToString());
+  return OK;
 }
 
 void HttpNetworkTransaction::OnConnected(HttpRequestInfo* request_info) {
@@ -92,7 +104,7 @@ void HttpNetworkTransaction::OnBeforeRequest(HttpRequestInfo *request_info,
 }
 
 void HttpNetworkTransaction::OnResponseHeaderReceived(
-    HttpResponseInfo *response_info, std::string raw_response) {
+    HttpResponseInfo *response_info, const std::string& raw_response) {
   LOG(INFO) << "OnResponseHeaderReceived";
   auto& observers = session_->network_context()->url_request_observers_;
   for (auto& observer : observers) {
@@ -106,7 +118,7 @@ void HttpNetworkTransaction::OnResponseHeaderReceived(
 }
 
 void HttpNetworkTransaction::OnResponseBodyReceived(
-    HttpResponseInfo *response_info, std::string raw_response) {
+    HttpResponseInfo *response_info, const std::string& raw_response) {
   LOG(INFO) << "OnResponseBodyReceived";
   auto& observers = session_->network_context()->url_request_observers_;
   for (auto& observer : observers) {
@@ -119,7 +131,33 @@ void HttpNetworkTransaction::OnResponseBodyReceived(
   }
 }
 
+void HttpNetworkTransaction::OnHostResolved(HttpRequestInfo* request_info,
+                                            bool need_host_resolve,
+                                            const std::string& dns_ip) {
+  LOG(INFO) << "OnHostResolved";
+  auto& observers = session_->network_context()->url_request_observers_;
+  for (auto& observer : observers) {
+    auto observer_share = observer.lock();
+    if (observer_share.use_count()) {
+      observer_share->OnHostResolved(session_,
+                                     request_info,
+                                     need_host_resolve,
+                                     dns_ip);
+    }
+  }
+}
 
+void HttpNetworkTransaction::OnHostResolvedError(
+    HttpRequestInfo* request_info) {
+  LOG(INFO) << "OnHostResolved";
+  auto& observers = session_->network_context()->url_request_observers_;
+  for (auto& observer : observers) {
+    auto observer_share = observer.lock();
+    if (observer_share.use_count()) {
+      observer_share->OnHostResolveError(session_, request_info);
+    }
+  }
+}
 
 }  // namespace net
 }  // namespace tit

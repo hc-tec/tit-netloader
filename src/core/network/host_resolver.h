@@ -18,7 +18,7 @@ class HostResolver {
 
   virtual std::unique_ptr<HostResolver> Create() = 0;
 
-  virtual void Start(const URL& url) = 0;
+  virtual int Start(URL& url) = 0;
 
   virtual Address::Ptr GetAddressResult() = 0;
 
@@ -32,7 +32,7 @@ class SimpleHostResolver : public HostResolver {
 
   std::unique_ptr<HostResolver> Create() override;
 
-  void Start(const URL& url) override;
+  int Start(URL& url) override;
   Address::Ptr GetAddressResult() override;
 
  private:

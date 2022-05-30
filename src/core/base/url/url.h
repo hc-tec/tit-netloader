@@ -26,6 +26,7 @@ class URL {
 
   const std::string& host() { return host_; }
 
+  void set_port(uint32 port) { port_ = port; }
   uint32 port() const { return port_; }
 
   const std::string& path() { return path_; }

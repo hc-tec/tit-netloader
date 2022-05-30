@@ -32,13 +32,17 @@ class HttpNetworkTransaction :
   void OnBeforeRequest(HttpRequestInfo *request_info,
                        std::string &request_msg) override;
   void OnResponseHeaderReceived(HttpResponseInfo *response_info,
-                                std::string raw_response) override;
+                                const std::string& raw_response) override;
   void OnResponseBodyReceived(HttpResponseInfo *response_info,
-                              std::string raw_response) override;
+                              const std::string& raw_response) override;
 
+  void OnHostResolved(HttpRequestInfo* request_info,
+                      bool need_host_resolve,
+                      const std::string& dns_ip);
+  void OnHostResolvedError(HttpRequestInfo* request_info);
  private:
   bool NeedHostResolve();
-  void DoHostResolve();
+  int DoHostResolve();
 
   HttpNetworkSession* session_;
   HttpRequestInfo* request_info_;
