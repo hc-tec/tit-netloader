@@ -26,13 +26,25 @@ class HttpRequestObserverTest : public net::HttpRequestObserver {
   }
   void OnResponseHeaderReceived(net::HttpNetworkSession *session,
                                 net::HttpResponseInfo *response_info,
-                                std::string raw_response) override {
+                                const std::string& raw_response) override {
     LOG(INFO) << "HttpRequestObserverTest" " OnResponseHeaderReceived";
   }
   void OnResponseBodyReceived(net::HttpNetworkSession *session,
                               net::HttpResponseInfo *response_info,
-                              std::string raw_response) override {
+                              const std::string& raw_response) override {
     LOG(INFO) << "HttpRequestObserverTest" " OnResponseBodyReceived";
+  }
+  void OnHostResolved(net::HttpNetworkSession *session,
+                      net::HttpRequestInfo *request_info,
+                      bool need_host_resolve,
+                      const std::string& dns_ip) override {
+    LOG(INFO) << "HttpRequestObserverTest" " OnHostResolved " << dns_ip;
+  }
+
+  void OnHostResolveError(net::HttpNetworkSession *session,
+                          net::HttpRequestInfo *request_info) override {
+    LOG(INFO) << "HttpRequestObserverTest" " OnHostResolveError "
+              << request_info->url.origin_url();
   }
 };
 
@@ -48,7 +60,7 @@ int main() {
     service->AddHttpRequestObserver(httpRequestObserverTest);
 //    service->RemoveHttpRequestObserver(httpRequestObserverTest_weak);
     net::RequestParams params;
-    params.request_info.url = net::URL("http://148.70.204.53:3001/signin/");
+    params.request_info.url = net::URL("http://baidu.com");
     params.request_info.method = net::Method::POST;
     params.request_info.SetAddressByUrl();
     std::unique_ptr<net::URLLoader> loader = service->CreateURLLoader(params);
