@@ -205,7 +205,7 @@ bool TcpSocketTemplate<ConnFactory>::Connect(const Address::Ptr& address,
   }
 //  CHECK(is_valid());
   if(co::connect(fd(), address->addr(), address->addrlen(), ms)) {
-    LOG(ERROR) << "connect error";
+    LOG(ERROR) << "Connect error";
     return false;
   }
 

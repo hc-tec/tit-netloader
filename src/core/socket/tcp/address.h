@@ -47,7 +47,7 @@ class Address {
 
   virtual Family family() = 0;
 
-  virtual fastring ToString() = 0;
+  virtual std::string ToString() = 0;
 };
 
 class IPv4Address : public Address {
@@ -76,6 +76,10 @@ class IPv4Address : public Address {
   IPv4Address(const sockaddr_in& addr)
       : addr_(addr) {}
 
+  IPv4Address(addrinfo addr) {
+    addr_ = *(struct sockaddr_in*)addr.ai_addr;
+  }
+
   uint16 port() const override {
     return ntoh16(addr_.sin_port);
   }
@@ -91,8 +95,8 @@ class IPv4Address : public Address {
 
   Family family() override { return kIpv4; }
 
-  fastring ToString() override {
-    return co::to_string(&addr_);
+  std::string ToString() override {
+    return std::string(std::move(co::to_string(&addr_).data()));
   }
 
  private:
@@ -126,6 +130,10 @@ class IPv6Address : public Address {
   IPv6Address(const sockaddr_in6& addr)
       : addr_(addr) {}
 
+  IPv6Address(addrinfo addr) {
+    addr_ = *(struct sockaddr_in6*)addr.ai_addr;
+  }
+
   uint16 port() const override {
     return ntoh16(addr_.sin6_port);
   }
@@ -141,8 +149,8 @@ class IPv6Address : public Address {
 
   Family family() override { return kIpv6; }
 
-  fastring ToString() override {
-    return co::to_string(&addr_);
+  std::string ToString() override {
+    return std::string(std::move(co::to_string(&addr_).data()));
   }
 
  private:
