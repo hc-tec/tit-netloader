@@ -10,6 +10,7 @@
 namespace tit {
 namespace net {
 
+class ClientSocketPool;
 class ClientSocketPoolManager;
 class HostResolver;
 class HttpStreamFactory;
@@ -29,6 +30,8 @@ class HttpNetworkSession {
     return http_stream_factory_.get();
   }
 
+  ClientSocketPool* GetClientSocketPool(std::string type);
+
  private:
   friend URLRequestContextBuilder;
 
@@ -37,6 +40,8 @@ class HttpNetworkSession {
   HostResolver* host_resolver_;
 
   std::unique_ptr<HttpStreamFactory> http_stream_factory_;
+  std::unique_ptr<ClientSocketPool> normal_socket_pool_;
+  std::unique_ptr<ClientSocketPool> websocket_socket_pool_;
 };
 
 }  // namespace net

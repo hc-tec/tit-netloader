@@ -23,8 +23,10 @@ class HttpNetworkTransaction :
   explicit HttpNetworkTransaction(HttpNetworkSession* session);
   ~HttpNetworkTransaction() override;
 
+  // HttpTransaction
   int Start(HttpRequestInfo *request_info) override;
   int Restart() override;
+  int End() override;
   const HttpResponseInfo *GetResponseInfo() const override;
 
   // HttpStream::Delegate
@@ -40,6 +42,8 @@ class HttpNetworkTransaction :
                       bool need_host_resolve,
                       const std::string& dns_ip);
   void OnHostResolvedError(HttpRequestInfo* request_info);
+
+
  private:
   bool NeedHostResolve();
   int DoHostResolve();
@@ -49,6 +53,7 @@ class HttpNetworkTransaction :
 
   HttpResponseInfo response_info_;
 
+  std::unique_ptr<ClientSocketHandle> client_socket_handle_;
   std::unique_ptr<HttpStream> stream_;
 };
 

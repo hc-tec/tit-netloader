@@ -15,6 +15,7 @@
 #include "core/network/resource_scheduler.h"
 #include "core/socket/client_socket_handle.h"
 #include "core/socket/tcp/transport_client_socket.h"
+#include "core/socket/client_socket_pool.h"
 #include "core/url_request/url_request_context_builder.h"
 
 namespace tit {
@@ -31,14 +32,11 @@ int HttpNetworkTransaction::Start(HttpRequestInfo *request_info) {
   if (rv != OK) return rv;
   HttpStreamFactory* stream_factory = session_->http_stream_factory();
 
-  std::unique_ptr<TransportClientSocket> socket =
-      std::make_unique<TransportClientSocket>();
+  ClientSocketPool::GroupId group_id(request_info_->url);
 
-  std::unique_ptr<ClientSocketHandle> handle =
-      std::make_unique<ClientSocketHandle>();
+  client_socket_handle_ = std::make_unique<ClientSocketHandle>(group_id);
 
-  handle->SetSocket(std::move(socket));
-  stream_ = stream_factory->RequestStream(std::move(handle),
+  stream_ = stream_factory->RequestStream(client_socket_handle_.get(),
                                           request_info,
                                           this);
   rv = stream_->SendRequest(&response_info_);
@@ -52,6 +50,13 @@ int HttpNetworkTransaction::Start(HttpRequestInfo *request_info) {
 }
 
 int HttpNetworkTransaction::Restart() { return 0; }
+
+int HttpNetworkTransaction::End() {
+  HttpStreamFactory* stream_factory = session_->http_stream_factory();
+  stream_factory->RecycleStream(
+      client_socket_handle_.get(),
+      request_info_);
+}
 
 const HttpResponseInfo *HttpNetworkTransaction::GetResponseInfo() const {
   return &response_info_;
@@ -158,6 +163,7 @@ void HttpNetworkTransaction::OnHostResolvedError(
     }
   }
 }
+
 
 }  // namespace net
 }  // namespace tit

@@ -22,6 +22,7 @@ class HttpCacheTransaction : public HttpTransaction {
   int Start(HttpRequestInfo* request_info) override;
   int Restart() override;
   const HttpResponseInfo *GetResponseInfo() const override;
+  int End() override;
 
  private:
   int DoPrepareCache();

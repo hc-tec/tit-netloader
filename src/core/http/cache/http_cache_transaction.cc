@@ -15,9 +15,13 @@ HttpCacheTransaction::HttpCacheTransaction(HttpCache *cache)
 
 int HttpCacheTransaction::Start(HttpRequestInfo *request_info) {
   request_info_ = request_info;
-  DoPrepareCache();
-  DoSendRequest();
-  DoReadResponse();
+  int rv = DoPrepareCache();
+  if (rv != OK) return rv;
+  rv = DoSendRequest();
+  if (rv != OK) return rv;
+  rv = DoReadResponse();
+  if (rv != OK) return rv;
+  network_trans_->End();
 }
 
 int HttpCacheTransaction::Restart() { return 0; }
@@ -35,7 +39,11 @@ int HttpCacheTransaction::DoSendRequest() {
   return rv;
 }
 
-int HttpCacheTransaction::DoReadResponse() { return OK; }
+int HttpCacheTransaction::DoReadResponse() {
+  network_trans_->GetResponseInfo();
+  return OK;
+}
+int HttpCacheTransaction::End() { return network_trans_->End(); }
 
 }  // namespace net
 }  // namespace tit
