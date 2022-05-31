@@ -43,6 +43,8 @@ URL::URL(std::string url)
 //  path_.append(std::move(parser.v_param.uri));
 }
 
+URL::URL(const URL& url) = default;
+
 //URL& URL::operator=(const URL& other) = default;
 
 log::LogStream& operator<<(log::LogStream& stream, URL url) {

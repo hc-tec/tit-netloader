@@ -20,6 +20,8 @@ class URL {
 
   URL(std::string url);
 
+  URL(const URL& url);
+
   const std::string& origin_url() { return origin_url_; }
 
   const std::string& scheme() { return scheme_; }
