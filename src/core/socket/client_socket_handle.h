@@ -7,6 +7,8 @@
 
 #include <memory>
 
+#include "core/socket/client_socket_pool.h"
+
 namespace tit {
 namespace net {
 
@@ -15,7 +17,7 @@ class StreamSocket;
 class ClientSocketHandle {
  public:
 
-  ClientSocketHandle();
+  explicit ClientSocketHandle(const ClientSocketPool::GroupId& group_id);
 
   ClientSocketHandle(const ClientSocketHandle&) = delete;
   ClientSocketHandle& operator=(const ClientSocketHandle&) = delete;
@@ -24,13 +26,15 @@ class ClientSocketHandle {
 
   void CloseSocket();
 
-  void SetSocket(std::unique_ptr<StreamSocket> socket);
+  ClientSocketPool::GroupId group_id() { return group_id_; }
 
+  void set_socket(std::unique_ptr<StreamSocket> socket);
   StreamSocket* socket() { return socket_.get(); }
 
   std::unique_ptr<StreamSocket> PassSocket();
 
  private:
+  ClientSocketPool::GroupId group_id_;
   std::unique_ptr<StreamSocket> socket_;
 };
 

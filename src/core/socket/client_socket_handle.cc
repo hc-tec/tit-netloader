@@ -9,7 +9,9 @@
 namespace tit {
 namespace net {
 
-ClientSocketHandle::ClientSocketHandle() {}
+ClientSocketHandle::ClientSocketHandle(
+    const ClientSocketPool::GroupId& group_id)
+     : group_id_(group_id) {}
 
 ClientSocketHandle::~ClientSocketHandle() {}
 
@@ -17,13 +19,14 @@ void ClientSocketHandle::CloseSocket() {
   socket_->Disconnect();
 }
 
-void ClientSocketHandle::SetSocket(std::unique_ptr<StreamSocket> socket) {
+void ClientSocketHandle::set_socket(std::unique_ptr<StreamSocket> socket) {
   socket_ = std::move(socket);
 }
 
 std::unique_ptr<StreamSocket> ClientSocketHandle::PassSocket() {
   return std::move(socket_);
 }
+
 
 }  // namespace net
 }  // namespace tit
