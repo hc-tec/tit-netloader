@@ -19,6 +19,8 @@ class HttpTransaction {
 
   virtual int Restart() = 0;
 
+  virtual int End() = 0;
+
   virtual const HttpResponseInfo* GetResponseInfo() const = 0;
 
 };

@@ -5,11 +5,15 @@
 #ifndef TIT_NETLOADER_HTTP_STREAM_H
 #define TIT_NETLOADER_HTTP_STREAM_H
 
+#include <memory>
 #include <string>
+
+#include "core/socket/tcp/stream_socket.h"
 
 namespace tit {
 namespace net {
 
+class ClientSocketHandle;
 struct HttpRequestInfo;
 struct HttpResponseInfo;
 

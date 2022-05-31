@@ -24,11 +24,15 @@ class HttpStreamFactory {
   virtual ~HttpStreamFactory();
 
   virtual std::unique_ptr<HttpStream> RequestStream(
-      std::unique_ptr<ClientSocketHandle> connection,
+      ClientSocketHandle* connection,
       HttpRequestInfo* request_info,
       HttpStream::Delegate* delegate) = 0;
 
- private:
+  virtual void RecycleStream(
+      ClientSocketHandle* connection,
+      HttpRequestInfo *request_info) = 0;
+
+ protected:
   HttpNetworkSession* session_;
 };
 

@@ -20,7 +20,7 @@ class ClientSocketHandle;
 
 class HttpBasicStream : public HttpStream {
  public:
-  HttpBasicStream(std::unique_ptr<ClientSocketHandle> connection,
+  HttpBasicStream(ClientSocketHandle* connection,
                   bool using_proxy,
                   HttpStream::Delegate* delegate);
 
@@ -41,7 +41,7 @@ class HttpBasicStream : public HttpStream {
   HttpStream::Delegate* delegate_;
 
   bool using_proxy_;
-  std::unique_ptr<ClientSocketHandle> connection_;
+  ClientSocketHandle* connection_;
   std::string read_buf_;
   HttpRequestInfo* request_info_;
   HttpResponseInfo* response_info_;

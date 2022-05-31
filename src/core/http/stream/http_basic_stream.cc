@@ -15,12 +15,12 @@
 namespace tit {
 namespace net {
 
-HttpBasicStream::HttpBasicStream(std::unique_ptr<ClientSocketHandle> connection,
+HttpBasicStream::HttpBasicStream(ClientSocketHandle* connection,
                                  bool using_proxy,
                                  HttpStream::Delegate* delegate)
     : delegate_(delegate),
       using_proxy_(using_proxy),
-      connection_(std::move(connection)),
+      connection_(connection),
       response_parser_(std::make_unique<HttpResponseParser>()) {
 
 }
@@ -49,9 +49,11 @@ int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
                         request_info_->headers.ToString() +
       (request_info_->body ? request_info_->body->ToString() : "");
   LOG(INFO) << "Send Request" << request_info_;
-  bool connected = connection_->socket()->Connect(request_info_->address);
-  if (!connected) {
-    return ERR_CONNECTION_FAILED;
+  if (!connection_->socket()->IsConnected()) {
+    bool connected = connection_->socket()->Connect(request_info_->address);
+    if (!connected) {
+      return ERR_CONNECTION_FAILED;
+    }
   }
   delegate_->OnConnected(request_info_);
   delegate_->OnBeforeRequest(request_info_, request);
@@ -91,8 +93,6 @@ void HttpBasicStream::Close() {
   StreamSocket* socket = connection_->socket();
   socket->Disconnect();
 }
-
-
 
 }  // namespace net
 }  // namespace tit

@@ -19,10 +19,13 @@ class HttpBasicStreamFactory : public HttpStreamFactory {
   ~HttpBasicStreamFactory();
 
   std::unique_ptr<HttpStream> RequestStream(
-      std::unique_ptr<ClientSocketHandle> connection,
+      ClientSocketHandle* connection,
       HttpRequestInfo *request_info,
       HttpStream::Delegate* delegate
       ) override;
+  void RecycleStream(
+      ClientSocketHandle* connection,
+      HttpRequestInfo *request_info) override;
 };
 
 }  // namespace net
