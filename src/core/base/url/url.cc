@@ -43,7 +43,12 @@ URL::URL(std::string url)
 //  path_.append(std::move(parser.v_param.uri));
 }
 
-URL::URL(const URL& url) = default;
+URL::URL(const URL& url)
+    : origin_url_(url.origin_url_),
+      scheme_(url.scheme_),
+      host_(url.host_),
+      port_(url.port_),
+      path_(url.path_) {}
 
 //URL& URL::operator=(const URL& other) = default;
 

@@ -40,6 +40,11 @@ class SchemeHostPort {
     return std::tie(scheme_, host_, port_) ==
            std::tie(other.scheme_, other.host_, other.port_);
   }
+
+  bool operator<(const SchemeHostPort& other) const {
+    return port_ < other.port_;
+  }
+
  private:
   std::string scheme_;
   std::string host_;
