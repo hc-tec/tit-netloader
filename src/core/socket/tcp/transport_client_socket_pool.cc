@@ -43,8 +43,7 @@ int TransportClientSocketPool::RequestSocket(
     group->IncrementActiveSocketCount();
   } else {
     if (group->CanCreateNewSocket(max_sockets_per_group_)) {
-      std::unique_ptr<TransportClientSocket> socket =
-          std::make_unique<TransportClientSocket>();
+      std::unique_ptr<StreamSocket> socket = CreateSocket();
       LOG(TRACE) << "Create socket: " << &socket;
       handle->set_socket(std::move(socket));
       group->IncrementActiveSocketCount();
@@ -84,6 +83,10 @@ TransportClientSocketPool::Group *TransportClientSocketPool::GetOrCreateGroup(
     }
   }
   return it->second.get();
+}
+
+std::unique_ptr<StreamSocket> TransportClientSocketPool::CreateSocket() {
+  return std::make_unique<TransportClientSocket>();
 }
 
 }  // namespace net

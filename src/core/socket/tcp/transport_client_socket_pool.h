@@ -23,7 +23,7 @@ class TransportClientSocketPool : public ClientSocketPool {
  public:
   TransportClientSocketPool(int max_sockets,
                             int max_sockets_per_group);
-  ~TransportClientSocketPool();
+  virtual ~TransportClientSocketPool();
 
   // ClientSocketPool
   int RequestSocket(const GroupId& group_id,
@@ -33,6 +33,8 @@ class TransportClientSocketPool : public ClientSocketPool {
   void CloseIdleSockets(const GroupId& group_id) override;
   int IdleSocketCount() const override;
   size_t IdleSocketCountInGroup(const GroupId& group_id) const override;
+
+  virtual std::unique_ptr<StreamSocket> CreateSocket();
 
  public:
   class Group {

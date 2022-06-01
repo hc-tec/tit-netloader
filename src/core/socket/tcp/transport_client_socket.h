@@ -31,7 +31,7 @@ class TransportClientSocket : public StreamSocket {
   const Address::Ptr& GetPeerAddress() const override;
   const Address::Ptr& GetLocalAddress() const override;
 
- private:
+ protected:
   TcpSocket::Ptr socket_;
 };
 

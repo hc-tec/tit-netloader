@@ -47,7 +47,7 @@ class TcpSocketTemplate {
 //    return std::make_shared<Socket>(sock);
 //  }
 
-  void Init(int fd) {
+  virtual void Init(int fd) {
     if (unlikely(fd == kInvalidFd)) {
       LOG(ERROR) << "socket create error";
     } else {
@@ -105,11 +105,11 @@ class TcpSocketTemplate {
   const Address::Ptr& local_addr() const { return local_addr_; }
   const Address::Ptr& remote_addr() const { return remote_addr_; }
 
-  bool Bind(const Address::Ptr& addr) {
+  virtual bool Bind(const Address::Ptr& addr) {
     if (!is_valid()) {
       CreateSocket();
     }
-    CHECK(is_valid());
+//    CHECK(is_valid());
     if (co::bind(fd(), addr->addr(), addr->addrlen())) {
       LOG(ERROR) << "bind error";
       return false;
@@ -126,13 +126,13 @@ class TcpSocketTemplate {
     return true;
   }
 
-  Ptr Accept();
+  virtual Ptr Accept();
 
-  bool Connect(const Address::Ptr& address, uint64_t timeout_ms = -1);
+  virtual bool Connect(const Address::Ptr& address, uint64_t timeout_ms = -1);
 
   ConnType get_conn() { return conn_; }
 
- private:
+ protected:
 
   static const int kMaxConn = 4096;
 
@@ -147,7 +147,6 @@ class TcpSocketTemplate {
   Address::Ptr local_addr_;
   Address::Ptr remote_addr_;
 
- protected:
   bool connected_;
 };
 
@@ -187,7 +186,7 @@ void TcpSocketTemplate<ConnFactory>::InitRemoteAddr() {
 
 template <typename ConnFactory>
 typename TcpSocketTemplate<ConnFactory>::Ptr TcpSocketTemplate<ConnFactory>::Accept() {
-  CHECK(is_valid());
+//  CHECK(is_valid());
   TcpSocketTemplate::Ptr sock = TcpSocketTemplate::Create(family(), type(), protocol());
   int client_sock = co::accept(fd(), nullptr, nullptr);
   if (client_sock < 0) {
