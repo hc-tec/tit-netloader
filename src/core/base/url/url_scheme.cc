@@ -9,6 +9,16 @@
 namespace tit {
 namespace net {
 
+std::string ProtocolToString(ProtocolType type) {
+  switch (type) {
+    case ProtocolType::HTTP1_0: return "HTTP/1.0";
+    case ProtocolType::HTTP1_1: return "HTTP/1.1";
+    case ProtocolType::HTTP2: return "HTTP/2.0";
+    default:
+      return "HTTP/1.0";
+  }
+}
+
 void URLScheme::RegisterSchemeWithPort(const char *scheme, uint32 port) {
   scheme_port_map_[scheme] = port;
 }

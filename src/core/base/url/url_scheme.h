@@ -13,6 +13,17 @@
 namespace tit {
 namespace net {
 
+enum ProtocolType {
+  HTTP1_0,
+  HTTP1_1,
+  HTTP2,
+  WEBSOCKER,
+  QUIC,
+  OTHER
+};
+
+std::string ProtocolToString(ProtocolType type);
+
 class URLScheme {
  public:
 
