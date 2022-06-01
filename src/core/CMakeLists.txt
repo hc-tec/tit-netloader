@@ -17,3 +17,15 @@ install(
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
+
+if(WITH_OPENSSL)
+    find_package(OpenSSL 1.1.0 REQUIRED)
+    target_compile_definitions(core PRIVATE HAS_OPENSSL)
+    target_link_libraries(core PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+    if(WIN32)
+        # FindOpenSSL.cmake shipped in CMake < 3.21.0 doesn't properly propagate
+        # crypt32. We should also handle ws2_32 but cocoyaxi link to it later.
+        target_link_libraries(core PRIVATE crypt32)
+    endif()
+endif()
+

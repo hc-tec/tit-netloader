@@ -8,6 +8,11 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 add_compile_options(-Wall -O0 -std=c++17 -g -Wno-sign-compare -Wno-class-memaccess -Wno-strict-aliasing)
 
+
+# build with openssl 1.1.0+
+option(WITH_OPENSSL "build with openssl" ON)
+
+
 include_directories(src)
 
 # link dir of libhttp_parser.so
