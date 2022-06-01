@@ -55,6 +55,7 @@ int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
       return ERR_CONNECTION_FAILED;
     }
   }
+  LOG(TRACE) << "\n" << request;
   delegate_->OnConnected(request_info_);
   delegate_->OnBeforeRequest(request_info_, request);
   connection_->socket()->Write(request.data(), request.size());
@@ -67,7 +68,7 @@ int HttpBasicStream::ReadResponseHeaders() {
   LOG(INFO) << "Read Response data: \n" << buf;
   response_info_->buffer.Buffer(buf, buf_size);
   response_parser_->ParseHeaders();
-  delegate_->OnResponseHeaderReceived(response_info_,
+  delegate_->OnResponseHeaderReceived(request_info_, response_info_,
                                       std::string(buf, buf_size));
   return OK;
 }
@@ -75,17 +76,22 @@ int HttpBasicStream::ReadResponseHeaders() {
 int HttpBasicStream::ReadResponseBody() {
   int remain = response_parser_->RemainSize();
   if (remain <= 0) {
-    delegate_->OnResponseBodyReceived(response_info_, "");
+    delegate_->OnResponseBodyReceived(request_info_, response_info_, "");
     return OK;
   }
 
   char buf[remain];
   int buf_size = connection_->socket()->Read(buf, remain);
+  if (buf_size == 0) {
+    delegate_->OnConnectClosed(request_info_, response_info_);
+    return ERR_CONNECTION_CLOSED;
+  }
   LOG(INFO) << "Read Response data: \n" << buf;
   response_info_->buffer.Buffer(buf, buf_size);
   response_parser_->ParseBody();
-  delegate_->OnResponseBodyReceived(response_info_,
-                                      std::string(buf, buf_size));
+  delegate_->OnResponseBodyReceived(request_info_,
+                                    response_info_,
+                                    std::string(buf, buf_size));
   return OK;
 }
 

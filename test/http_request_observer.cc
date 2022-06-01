@@ -25,11 +25,13 @@ class HttpRequestObserverTest : public net::HttpRequestObserver {
     LOG(INFO) << "HttpRequestObserverTest" " OnBeforeRequest";
   }
   void OnResponseHeaderReceived(net::HttpNetworkSession *session,
+                                net::HttpRequestInfo *request_info,
                                 net::HttpResponseInfo *response_info,
                                 const std::string& raw_response) override {
     LOG(INFO) << "HttpRequestObserverTest" " OnResponseHeaderReceived";
   }
   void OnResponseBodyReceived(net::HttpNetworkSession *session,
+                              net::HttpRequestInfo *request_info,
                               net::HttpResponseInfo *response_info,
                               const std::string& raw_response) override {
     LOG(INFO) << "HttpRequestObserverTest" " OnResponseBodyReceived";
@@ -45,6 +47,11 @@ class HttpRequestObserverTest : public net::HttpRequestObserver {
                           net::HttpRequestInfo *request_info) override {
     LOG(INFO) << "HttpRequestObserverTest" " OnHostResolveError "
               << request_info->url.origin_url();
+  }
+  void OnConnectClosed(net::HttpNetworkSession *session,
+                       net::HttpRequestInfo *request_info,
+                       net::HttpResponseInfo *response_info) override {
+    LOG(INFO) << "HttpRequestObserverTest" " OnConnectClosed ";
   }
 };
 

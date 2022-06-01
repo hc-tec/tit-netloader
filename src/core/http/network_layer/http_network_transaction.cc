@@ -114,13 +114,16 @@ void HttpNetworkTransaction::OnBeforeRequest(HttpRequestInfo *request_info,
 }
 
 void HttpNetworkTransaction::OnResponseHeaderReceived(
-    HttpResponseInfo *response_info, const std::string& raw_response) {
+    HttpRequestInfo *request_info,
+    HttpResponseInfo *response_info,
+    const std::string& raw_response) {
   LOG(INFO) << "OnResponseHeaderReceived";
   auto& observers = session_->network_context()->url_request_observers_;
   for (auto& observer : observers) {
     auto observer_share = observer.lock();
     if (observer_share.use_count()) {
       observer_share->OnResponseHeaderReceived(session_,
+                                               request_info,
                                                response_info,
                                                raw_response);
     }
@@ -128,13 +131,16 @@ void HttpNetworkTransaction::OnResponseHeaderReceived(
 }
 
 void HttpNetworkTransaction::OnResponseBodyReceived(
-    HttpResponseInfo *response_info, const std::string& raw_response) {
+    HttpRequestInfo *request_info,
+    HttpResponseInfo *response_info,
+    const std::string& raw_response) {
   LOG(INFO) << "OnResponseBodyReceived";
   auto& observers = session_->network_context()->url_request_observers_;
   for (auto& observer : observers) {
     auto observer_share = observer.lock();
     if (observer_share.use_count()) {
       observer_share->OnResponseBodyReceived(session_,
+                                             request_info,
                                              response_info,
                                              raw_response);
     }
@@ -169,6 +175,19 @@ void HttpNetworkTransaction::OnHostResolvedError(
   }
 }
 
+void HttpNetworkTransaction::OnConnectClosed(HttpRequestInfo* request_info,
+                                             HttpResponseInfo* response_info) {
+
+  LOG(INFO) << "OnConnectClosed";
+  auto& observers = session_->network_context()->url_request_observers_;
+  for (auto& observer : observers) {
+    auto observer_share = observer.lock();
+    if (observer_share.use_count()) {
+      observer_share->OnConnectClosed(session_, request_info, response_info);
+    }
+  }
+
+}
 
 }  // namespace net
 }  // namespace tit

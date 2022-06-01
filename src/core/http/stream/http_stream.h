@@ -27,10 +27,14 @@ class HttpStream {
     virtual void OnConnected(HttpRequestInfo* request_info) = 0;
     virtual void OnBeforeRequest(HttpRequestInfo* request_info,
                                  std::string& request_msg) = 0;
-    virtual void OnResponseHeaderReceived(HttpResponseInfo* response_info,
+    virtual void OnResponseHeaderReceived(HttpRequestInfo* request_info,
+                                          HttpResponseInfo* response_info,
                                           const std::string& raw_response) = 0;
-    virtual void OnResponseBodyReceived(HttpResponseInfo* response_info,
+    virtual void OnResponseBodyReceived(HttpRequestInfo* request_info,
+                                        HttpResponseInfo* response_info,
                                         const std::string& raw_response) = 0;
+    virtual void OnConnectClosed(HttpRequestInfo* request_info,
+                                 HttpResponseInfo* response_info) = 0;
   };
 
   virtual ~HttpStream() {}

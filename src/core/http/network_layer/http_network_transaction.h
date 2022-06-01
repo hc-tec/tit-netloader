@@ -33,10 +33,14 @@ class HttpNetworkTransaction :
   void OnConnected(HttpRequestInfo* request_info) override;
   void OnBeforeRequest(HttpRequestInfo *request_info,
                        std::string &request_msg) override;
-  void OnResponseHeaderReceived(HttpResponseInfo *response_info,
+  void OnResponseHeaderReceived(HttpRequestInfo *request_info,
+                                HttpResponseInfo *response_info,
                                 const std::string& raw_response) override;
-  void OnResponseBodyReceived(HttpResponseInfo *response_info,
+  void OnResponseBodyReceived(HttpRequestInfo *request_info,
+                              HttpResponseInfo *response_info,
                               const std::string& raw_response) override;
+  void OnConnectClosed(HttpRequestInfo *request_info,
+                       HttpResponseInfo *response_info) override;
 
   void OnHostResolved(HttpRequestInfo* request_info,
                       bool need_host_resolve,
