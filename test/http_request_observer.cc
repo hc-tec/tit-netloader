@@ -48,28 +48,41 @@ class HttpRequestObserverTest : public net::HttpRequestObserver {
   }
 };
 
-int main() {
-  go([]() {
-
-    net::NetworkService* service = net::GetNetworkService();
-    std::shared_ptr<HttpRequestObserverTest> httpRequestObserverTest =
-        std::make_shared<HttpRequestObserverTest>();
+void send_request(const char *url,
+                  net::Method method,
+                  net::HttpRequestHeaders headers,
+                  std::unique_ptr<net::HttpRequestBody> body) {
+  net::NetworkService* service = net::GetNetworkService();
+  std::shared_ptr<HttpRequestObserverTest> httpRequestObserverTest =
+      std::make_shared<HttpRequestObserverTest>();
 //    httpRequestObserverTest.reset();
-    std::weak_ptr<HttpRequestObserverTest> httpRequestObserverTest_weak(
-        HttpRequestObserverTest);
-    service->AddHttpRequestObserver(httpRequestObserverTest);
+  std::weak_ptr<HttpRequestObserverTest> httpRequestObserverTest_weak(
+      HttpRequestObserverTest);
+  service->AddHttpRequestObserver(httpRequestObserverTest);
 //    service->RemoveHttpRequestObserver(httpRequestObserverTest_weak);
-    net::RequestParams params;
-    params.request_info.url = net::URL("http://baidu.com");
-    params.request_info.method = net::Method::POST;
-    params.request_info.SetAddressByUrl();
-    std::unique_ptr<net::URLLoader> loader = service->CreateURLLoader(params);
-    if (loader != nullptr) {
-      loader->Start();
-    } else {
+  net::RequestParams params;
+  params.request_info.url = net::URL(url);
+  params.request_info.method = method;
+  params.request_info.headers = headers;
+  params.request_info.body = std::move(body);
+//    params.request_info.SetAddressByUrl();
+  std::unique_ptr<net::URLLoader> loader = service->CreateURLLoader(params);
+  if (loader != nullptr) {
+    loader->Start();
+  } else {
 
-    }
-  });
+  }
+}
+
+int main() {
+  for (int i = 0; i < 10; ++i) {
+    go([]() {
+      net::HttpRequestHeaders headers;
+      std::unique_ptr<net::HttpRequestBody> body =
+          std::make_unique<net::HttpRequestBufferBody>("application/json", "{}");
+      send_request("http://baidu.com", net::Method::GET, headers, std::move(body));
+    });
+  }
   char ch;
   std::cin >> ch;
 }
