@@ -63,7 +63,12 @@ const HttpResponseInfo *HttpNetworkTransaction::GetResponseInfo() const {
 }
 
 bool HttpNetworkTransaction::NeedHostResolve() {
-  if (request_info_->url.is_ip()) return false;
+  if (request_info_->url.is_ip()) {
+    if (request_info_->address.get() == nullptr) {
+      request_info_->SetAddressByUrl();
+    }
+    return false;
+  }
   return true;
 }
 

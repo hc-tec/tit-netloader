@@ -41,6 +41,7 @@ class HttpNetworkSession {
 
   std::unique_ptr<HttpStreamFactory> http_stream_factory_;
   std::unique_ptr<ClientSocketPool> normal_socket_pool_;
+  std::unique_ptr<ClientSocketPool> ssl_socket_pool_;
   std::unique_ptr<ClientSocketPool> websocket_socket_pool_;
 };
 
