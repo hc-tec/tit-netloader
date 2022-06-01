@@ -80,7 +80,8 @@ int main() {
       net::HttpRequestHeaders headers;
       std::unique_ptr<net::HttpRequestBody> body =
           std::make_unique<net::HttpRequestBufferBody>("application/json", "{}");
-      send_request("http://baidu.com", net::Method::GET, headers, std::move(body));
+      send_request("http://baidu.com", net::Method::GET,
+                   headers, std::move(body));
     });
   }
   char ch;
