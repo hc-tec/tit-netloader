@@ -39,37 +39,37 @@ class ConnFactory {
 class TcpConn : public ConnectionInterface {
  public:
   explicit TcpConn(int sock) : sock_(sock) {}
-  ~TcpConn() override { this->Close(0); }
+  virtual ~TcpConn() override { this->Close(0); }
 
-  int Recv(void* buf, int n, int ms) override {
+  virtual int Recv(void* buf, int n, int ms) override {
     return co::recv(sock_, buf, n, ms);
   }
 
-  int Recvn(void* buf, int n, int ms) override {
+  virtual int Recvn(void* buf, int n, int ms) override {
     return co::recvn(sock_, buf, n, ms);
   }
 
-  int Send(const void* buf, int n, int ms) override {
+  virtual int Send(const void* buf, int n, int ms) override {
     return co::send(sock_, buf, n, ms);
   }
 
-  int Close(int ms) override {
+  virtual int Close(int ms) override {
     int r = sock_ != -1 ? co::close(sock_, ms) : 0;
     sock_ = -1;
     return r;
   }
 
-  int Reset(int ms) override {
+  virtual int Reset(int ms) override {
     int r = sock_ != -1 ? co::reset_tcp_socket(sock_, ms) : 0;
     sock_ = -1;
     return r;
   }
 
-  int socket() override {
+  virtual int socket() override {
     return sock_;
   }
 
- private:
+ protected:
   int sock_;
 };
 
