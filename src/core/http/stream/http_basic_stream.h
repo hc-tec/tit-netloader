@@ -29,7 +29,8 @@ class HttpBasicStream : public HttpStream {
 
   ~HttpBasicStream() override;
 
-  void RegisterRequest(HttpRequestInfo* request_info) override;
+  void RegisterRequest(HttpRequestInfo* request_info,
+                       const RequestParams* request_params) override;
   int InitializeStream() override;
   int SendRequest(HttpResponseInfo* response_info) override;
   int ReadResponseHeaders() override;
@@ -41,6 +42,7 @@ class HttpBasicStream : public HttpStream {
   HttpStream::Delegate* delegate_;
 
   bool using_proxy_;
+  const RequestParams* request_params_;
   ClientSocketHandle* connection_;
   std::string read_buf_;
   HttpRequestInfo* request_info_;

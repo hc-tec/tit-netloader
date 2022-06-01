@@ -33,7 +33,7 @@ std::unique_ptr<HttpStream> HttpBasicStreamFactory::RequestStream(
       request_info->url.scheme());
   int rv = pool->RequestSocket(connection->group_id(), connection);
   stream->InitializeStream();
-  stream->RegisterRequest(request_info);
+  stream->RegisterRequest(request_info, session_->request_params());
   return stream;
 }
 

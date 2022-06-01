@@ -16,6 +16,7 @@ namespace net {
 class ClientSocketHandle;
 struct HttpRequestInfo;
 struct HttpResponseInfo;
+struct RequestParams;
 
 class HttpStream {
  public:
@@ -39,7 +40,8 @@ class HttpStream {
 
   virtual ~HttpStream() {}
 
-  virtual void RegisterRequest(HttpRequestInfo* request_info) = 0;
+  virtual void RegisterRequest(HttpRequestInfo* request_info,
+                               const RequestParams* request_params) = 0;
 
   virtual int InitializeStream() = 0;
 

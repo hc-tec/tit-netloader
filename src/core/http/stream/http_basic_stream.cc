@@ -8,6 +8,7 @@
 #include "core/http/request/http_request_info.h"
 #include "core/http/response/http_response_info.h"
 #include "core/http/response//http_response_parser.h"
+#include "core/network/request_params.h"
 #include "core/socket/tcp/stream_socket.h"
 #include "core/socket/client_socket_handle.h"
 #include "log/logging.h"
@@ -27,7 +28,9 @@ HttpBasicStream::HttpBasicStream(ClientSocketHandle* connection,
 
 HttpBasicStream::~HttpBasicStream() {}
 
-void HttpBasicStream::RegisterRequest(HttpRequestInfo *request_info) {
+void HttpBasicStream::RegisterRequest(HttpRequestInfo *request_info,
+                                      const RequestParams* request_params) {
+  request_params_ = request_params;
   request_info_ = request_info;
 }
 
@@ -43,7 +46,8 @@ int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
   response_info_->address = request_info_->address;
   response_info_->body = std::make_shared<HttpResponseBufferBody>();
 
-  std::string request_line = request_info_->GenerateRequestLine();
+  std::string request_line = request_info_->GenerateRequestLine(
+      request_params_->protocol_type);
 
   std::string request = request_line +
                         request_info_->headers.ToString() +
