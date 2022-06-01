@@ -45,7 +45,7 @@ HttpRequestInfo::HttpRequestInfo(const HttpRequestInfo& other) {
 HttpRequestInfo::~HttpRequestInfo() {}
 
 std::string HttpRequestInfo::GenerateRequestLine() {
-  static const char kSuffix[] = " HTTP/1.1\r\n";
+  static const char kSuffix[] = " HTTP/1.0\r\n";
   const size_t kSuffixLen = std::size(kSuffix) - 1;
   std::string path = url.path();
   std::string request_line;
