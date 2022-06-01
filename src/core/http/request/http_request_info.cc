@@ -44,9 +44,11 @@ HttpRequestInfo::HttpRequestInfo(const HttpRequestInfo& other) {
 
 HttpRequestInfo::~HttpRequestInfo() {}
 
-std::string HttpRequestInfo::GenerateRequestLine() {
-  static const char kSuffix[] = " HTTP/1.0\r\n";
-  const size_t kSuffixLen = std::size(kSuffix) - 1;
+std::string HttpRequestInfo::GenerateRequestLine(ProtocolType protocol_type) {
+  std::string suffix(" ");
+  suffix.append(ProtocolToString(protocol_type))
+      .append("\r\n");
+  const size_t kSuffixLen = suffix.size() - 1;
   std::string path = url.path();
   std::string request_line;
   std::string method_str = MethodToString(method);
@@ -56,7 +58,7 @@ std::string HttpRequestInfo::GenerateRequestLine() {
   request_line.append(method_str);
   request_line.append(1, ' ');
   request_line.append(path);
-  request_line.append(kSuffix, kSuffixLen);
+  request_line.append(suffix);
   return request_line;
 }
 

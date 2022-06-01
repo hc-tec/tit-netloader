@@ -9,6 +9,7 @@
 #include <string>
 
 #include "core/base/url/url.h"
+#include "core/base/url/url_scheme.h"
 #include "core/socket/tcp/address.h"
 #include "http_request_body.h"
 #include "http_request_headers.h"
@@ -34,7 +35,7 @@ struct HttpRequestInfo {
   HttpRequestInfo(const HttpRequestInfo& other);
   ~HttpRequestInfo();
 
-  std::string GenerateRequestLine();
+  std::string GenerateRequestLine(ProtocolType protocol_type);
 
   void SetAddressByUrl();
 
