@@ -14,13 +14,13 @@ namespace net {
 RequestManager::RequestManager() : consume_request_id(0) {}
 
 uint64 RequestManager::GenerateRequestId() {
-  atomic_inc(&consume_request_id);
-  return consume_request_id;
+  std::lock_guard<std::mutex> g(request_map_lock_);
+  return ++consume_request_id;
 }
 
 uint64 RequestManager::PutRequest(URLLoader *url_loader) {
   std::lock_guard<std::mutex> g(request_map_lock_);
-  if (auto [pos, ok] = request_map_.insert({atomic_load(&consume_request_id), url_loader});
+  if (auto [pos, ok] = request_map_.insert({consume_request_id, url_loader});
       !ok) {
     LOG(ERROR) << "Request id: " << consume_request_id <<  " insert error";
     return -1;

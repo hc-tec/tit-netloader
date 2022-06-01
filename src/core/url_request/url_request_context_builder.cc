@@ -42,7 +42,7 @@ std::unique_ptr<URLRequestContext> URLRequestContextBuilder::Build() {
 
   SetHttpNetworkSessionComponents(network_session_.get(), context.get());
 
-  context->set_transaction_factory(std::move(http_transaction_factory_));
+  context->set_transaction_factory(http_transaction_factory_.get());
 
   return context;
 }

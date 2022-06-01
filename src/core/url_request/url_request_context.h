@@ -45,11 +45,11 @@ class URLRequestContext {
   }
 
   HttpTransactionFactory* transaction_factory() {
-    return http_transaction_factory_.get();
+    return http_transaction_factory_;
   }
   void set_transaction_factory(
-      std::unique_ptr<HttpTransactionFactory> transaction_factory) {
-    http_transaction_factory_ = std::move(transaction_factory);
+      HttpTransactionFactory* transaction_factory) {
+    http_transaction_factory_ = transaction_factory;
   }
 
  private:
@@ -61,7 +61,7 @@ class URLRequestContext {
 
   URLRequest* url_request_;
 
-  std::unique_ptr<HttpTransactionFactory> http_transaction_factory_;
+  HttpTransactionFactory* http_transaction_factory_;
 };
 
 }  // namespace net
