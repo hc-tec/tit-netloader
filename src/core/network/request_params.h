@@ -6,25 +6,18 @@
 #define TIT_NETLOADER_REQUEST_PARAMS_H
 
 #include "core/base/request_priority.h"
+#include "core/base/url/url_scheme.h"
 #include "core/http/request/http_request_info.h"
 
 namespace tit {
 namespace net {
-
-enum ProtocolType {
-  HTTP,
-  HTTP2,
-  WEBSOCKER,
-  QUIC,
-  OTHER
-};
 
 struct RequestParams {
   bool enable_spdy;
   bool enable_http2;
   bool enable_quic;
   std::string scheme;
-  ProtocolType protocol_type;
+  ProtocolType protocol_type { ProtocolType::HTTP1_0 };
   RequestPriority priority;
   HttpRequestInfo request_info;
 };
