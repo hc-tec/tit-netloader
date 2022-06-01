@@ -23,6 +23,7 @@ URLRequestContextBuilder::URLRequestContextBuilder(
       url_request_job_factory_(network_context_->job_factory()) {
   network_session_->host_resolver_ = network_context_->host_resolver();
   network_session_->network_context_ = network_context_;
+
   std::unique_ptr<HttpTransactionFactory> network_layer =
       std::make_unique<HttpNetworkLayer>(network_session_.get());
   http_transaction_factory_ = std::make_unique<HttpCache>(
@@ -32,12 +33,11 @@ URLRequestContextBuilder::URLRequestContextBuilder(
 URLRequestContextBuilder::~URLRequestContextBuilder() {}
 
 std::unique_ptr<URLRequestContext> URLRequestContextBuilder::Build() {
-  auto context = std::make_unique<URLRequestContext>();
+  auto context = std::make_unique<URLRequestContext>(this);
   context->set_host_resolver(
       network_context_->host_resolver());
   context->set_resource_scheduler(
       network_context_->resource_scheduler());
-
   context->set_job_factory(url_request_job_factory_);
 
   SetHttpNetworkSessionComponents(network_session_.get(), context.get());
@@ -50,7 +50,7 @@ std::unique_ptr<URLRequestContext> URLRequestContextBuilder::Build() {
 void URLRequestContextBuilder::SetHttpNetworkSessionComponents(
     HttpNetworkSession *session,
     URLRequestContext *request_context) {
-
+//  session->request_params_ = request_context->request_params();
 }
 
 }  // namespace net

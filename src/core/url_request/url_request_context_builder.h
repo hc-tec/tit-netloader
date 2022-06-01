@@ -37,6 +37,8 @@ class URLRequestContextBuilder {
     http_transaction_factory_ = std::move(transaction_factory);
   }
 
+  HttpNetworkSession* network_session() { return network_session_.get(); }
+
  private:
 
   void SetHttpNetworkSessionComponents(HttpNetworkSession* session,

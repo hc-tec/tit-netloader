@@ -10,17 +10,21 @@
 namespace tit {
 namespace net {
 
+struct RequestParams;
 class ClientSocketPool;
 class ClientSocketPoolManager;
 class HostResolver;
 class HttpStreamFactory;
 class NetworkContext;
+class URLRequestContext;
 class URLRequestContextBuilder;
 
 class HttpNetworkSession {
  public:
   HttpNetworkSession();
   ~HttpNetworkSession();
+
+  const RequestParams* request_params() { return request_params_; }
 
   NetworkContext* network_context() { return network_context_; }
 
@@ -33,8 +37,9 @@ class HttpNetworkSession {
   ClientSocketPool* GetClientSocketPool(std::string type);
 
  private:
+  friend URLRequestContext;
   friend URLRequestContextBuilder;
-
+  const RequestParams* request_params_;
   NetworkContext* network_context_;
 
   HostResolver* host_resolver_;

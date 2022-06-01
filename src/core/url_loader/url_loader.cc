@@ -31,8 +31,9 @@ URLLoader::URLLoader(uint64 request_id,
   url_request_context_ = url_request_context_builder_->Build();
   url_request_ = url_request_context_->
                  CreateURLRequest(request_params.request_info.url,
-                                         request_params.priority,
-                                         this);
+                                  request_params.priority,
+                                  request_params,
+                                  this);
   url_request_->set_request_info(request_params.request_info);
 }
 

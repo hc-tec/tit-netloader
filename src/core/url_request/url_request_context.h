@@ -12,20 +12,28 @@
 namespace tit {
 namespace net {
 
+struct RequestParams;
 class HostResolver;
 class HttpTransactionFactory;
 class ResourceScheduler;
 class URLRequestJobFactory;
+class URLRequestContextBuilder;
 
 class URLRequestContext {
  public:
-  URLRequestContext();
+  explicit URLRequestContext(URLRequestContextBuilder* builder);
 
   ~URLRequestContext();
 
   std::unique_ptr<URLRequest> CreateURLRequest(const URL& url,
                                                RequestPriority priority,
+                                               const RequestParams &request_params,
                                                URLRequest::Delegate* delegate);
+
+  void set_request_params(const RequestParams* request_params) {
+    request_params_ = request_params;
+  }
+  const RequestParams* request_params() { return request_params_; }
 
   void set_host_resolver(HostResolver* host_resolver) {
     host_resolver_ = host_resolver;
@@ -53,11 +61,13 @@ class URLRequestContext {
   }
 
  private:
-//  friend URLRequest;
+//  friend URLRequestContextBuilder;
 
+  const RequestParams* request_params_;
   HostResolver* host_resolver_;
   ResourceScheduler* resource_scheduler_;
   URLRequestJobFactory* url_request_job_factory_;
+  URLRequestContextBuilder* url_request_context_builder_;
 
   URLRequest* url_request_;
 

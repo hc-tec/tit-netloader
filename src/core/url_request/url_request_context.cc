@@ -9,28 +9,34 @@
 #include "core/network/host_resolver.h"
 #include "core/network/network_context.h"
 #include "core/network/resource_scheduler.h"
+#include "core/http/network_layer/http_network_session.h"
 #include "core/url_request/url_request_job_factory.h"
 #include "core/url_request/url_request_context_builder.h"
 
 namespace tit {
 namespace net {
 
-URLRequestContext::URLRequestContext() {}
+URLRequestContext::URLRequestContext(URLRequestContextBuilder *builder)
+    : url_request_context_builder_(builder) {}
 
 URLRequestContext::~URLRequestContext() {}
 
 std::unique_ptr<URLRequest> URLRequestContext::CreateURLRequest(
     const URL &url,
     RequestPriority priority,
+    const RequestParams &request_params,
     URLRequest::Delegate *delegate) {
   auto url_request = std::make_unique<URLRequest>(url,
                                       priority,
                                       delegate,
                                       this);
-
+  request_params_ = &request_params;
+  url_request_context_builder_->network_session()->
+      request_params_ = request_params_;
   url_request_ = url_request.get();
   return url_request;
 }
+
 
 }  // namespace net
 }  // namespace tit
