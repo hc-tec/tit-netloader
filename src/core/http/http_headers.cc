@@ -63,7 +63,11 @@ void HttpHeaders::PutHeaders(const std::string& name,
 }
 
 std::string HttpHeaders::GetHeader(const std::string& name) {
-  return headers_[name];
+  auto it = headers_.find(name);
+  if (it == headers_.end()) {
+    return "";
+  }
+  return it->second;
 }
 
 std::string HttpHeaders::ToString() {
