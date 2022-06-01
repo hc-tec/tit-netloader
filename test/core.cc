@@ -19,7 +19,7 @@ int main() {
 
     net::NetworkService* service = net::GetNetworkService();
     net::RequestParams params;
-    params.request_info.url = net::URL("https://blog.csdn.net/Emperor10/article/details/123179056");
+    params.request_info.url = net::URL("https://github.com/hc-tec/tit-netloader");
     params.request_info.method = net::Method::GET;
     net::HttpRequestHeaders& headers = params.request_info.headers;
 

@@ -52,13 +52,14 @@ int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
   std::string request = request_line +
                         request_info_->headers.ToString() +
       (request_info_->body ? request_info_->body->ToString() : "");
-  LOG(INFO) << "Send Request" << request_info_;
+
   if (!connection_->socket()->IsConnected()) {
     bool connected = connection_->socket()->Connect(request_info_->address);
     if (!connected) {
       return ERR_CONNECTION_FAILED;
     }
   }
+  LOG(INFO) << "Send Request" << request_info_;
   LOG(TRACE) << "\n" << request;
   delegate_->OnConnected(request_info_);
   delegate_->OnBeforeRequest(request_info_, request);
