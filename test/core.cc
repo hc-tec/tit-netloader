@@ -19,11 +19,11 @@ int main() {
 
     net::NetworkService* service = net::GetNetworkService();
     net::RequestParams params;
-    params.request_info.url = net::URL("https://github.com/hc-tec/tit-netloader");
+    params.request_info.url = net::URL("https://www.zhihu.com/sign");
     params.request_info.method = net::Method::GET;
     net::HttpRequestHeaders& headers = params.request_info.headers;
 
-    headers.PutHeaders("accept-encoding", "gzip, deflate, br");
+    headers.PutHeaders("accept-encoding", "");
     headers.PutHeaders("accept", "*/*");
 //    headers.PutHeaders(net::HttpHeaders::CONNECTION,
 //                       net::HttpHeaders::Value::CONNECTION_KEEP_ALIVE);

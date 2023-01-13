@@ -85,18 +85,20 @@ int HttpBasicStream::ReadResponseBody() {
     return OK;
   }
 
-  char buf[remain];
-  int buf_size = connection_->socket()->Read(buf, remain);
-  if (buf_size == 0) {
-    delegate_->OnConnectClosed(request_info_, response_info_);
-    return ERR_CONNECTION_CLOSED;
+  while (remain > 0) {
+    char buf[MAX_READ_LEN];
+    int buf_size = connection_->socket()->Read(buf, MAX_READ_LEN);
+    if (buf_size == 0) {
+      delegate_->OnConnectClosed(request_info_, response_info_);
+      return ERR_CONNECTION_CLOSED;
+    }
+    remain -= buf_size;
+    LOG(INFO) << "Read Response data:" << buf_size << " remain: " << remain;
+    response_info_->buffer.Buffer(buf, buf_size);
+    response_parser_->ParseBody();
+    delegate_->OnResponseBodyReceived(request_info_, response_info_,
+                                      std::string(buf, buf_size));
   }
-  LOG(INFO) << "Read Response data: \n" << buf;
-  response_info_->buffer.Buffer(buf, buf_size);
-  response_parser_->ParseBody();
-  delegate_->OnResponseBodyReceived(request_info_,
-                                    response_info_,
-                                    std::string(buf, buf_size));
   return OK;
 }
 

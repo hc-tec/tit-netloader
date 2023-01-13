@@ -18,6 +18,8 @@ struct HttpResponseInfo;
 class HttpResponseParser;
 class ClientSocketHandle;
 
+const unsigned MAX_READ_LEN = 1500;
+
 class HttpBasicStream : public HttpStream {
  public:
   HttpBasicStream(ClientSocketHandle* connection,
