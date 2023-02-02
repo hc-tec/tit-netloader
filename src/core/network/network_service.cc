@@ -74,10 +74,7 @@ void NetworkService::RemoveHttpRequestObserver(
   network_context_->RemoveHttpRequestObserver(observer);
 }
 
-NetworkService* GetNetworkService() {
-  static NetworkService service;
-  return &service;
-}
+
 
 }  // namespace net
 }  // namespace tit

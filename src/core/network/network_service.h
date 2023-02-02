@@ -56,7 +56,10 @@ class NetworkService : public URLLoader::Delegate {
   std::unique_ptr<URLLoaderFactory> url_loader_factory_;
 };
 
-NetworkService* GetNetworkService();
+inline NetworkService* GetNetworkService() {
+  static NetworkService service;
+  return &service;
+}
 
 }  // namespace net
 }  // namespace tit
