@@ -44,6 +44,7 @@ void HttpBasicStreamFactory::RecycleStream(
       request_info->url.scheme());
   // if reusable
   int rv = pool->ReleaseSocket(connection->group_id(), connection->PassSocket());
+
 }
 
 }  // namespace net

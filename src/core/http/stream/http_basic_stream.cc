@@ -45,13 +45,17 @@ int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
   response_info_->url = request_info_->url;
   response_info_->address = request_info_->address;
   response_info_->body = std::make_shared<HttpResponseBufferBody>();
-
+  request_info_->body->DeclareHeaders(request_info_->headers);
   std::string request_line = request_info_->GenerateRequestLine(
       request_params_->protocol_type);
-
+  std::string body_data = request_info_->body->ToString();
+  if (request_info_->body) {
+    request_info_->headers.PutHeaders("content-length",
+                                      std::to_string(body_data.size()));
+  }
   std::string request = request_line +
                         request_info_->headers.ToString() +
-      (request_info_->body ? request_info_->body->ToString() : "");
+      (request_info_->body ? body_data : "");
 
   if (!connection_->socket()->IsConnected()) {
     bool connected = connection_->socket()->Connect(request_info_->address);
@@ -68,8 +72,12 @@ int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
 }
 
 int HttpBasicStream::ReadResponseHeaders() {
-  char buf[2048];
-  int buf_size = connection_->socket()->Read(buf, 2048);
+  char buf[MAX_READ_LEN];
+  int buf_size = connection_->socket()->Read(buf, MAX_READ_LEN);
+  if (buf_size == 0) {
+    delegate_->OnConnectClosed(request_info_, response_info_);
+    return ERR_CONNECTION_CLOSED;
+  }
   LOG(INFO) << "Read Response data: \n" << buf;
   response_info_->buffer.Buffer(buf, buf_size);
   response_parser_->ParseHeaders();

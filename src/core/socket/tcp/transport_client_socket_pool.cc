@@ -53,20 +53,33 @@ int TransportClientSocketPool::RequestSocket(
   }
   return OK;
 }
+
 int TransportClientSocketPool::ReleaseSocket(
     const ClientSocketPool::GroupId &group_id,
     std::unique_ptr<StreamSocket> socket) {
   Group* group = GetOrCreateGroup(group_id);
-  group->AddIdleSocket(std::move(socket));
-  group->DecrementActiveSocketCount();
+  if (socket->IsConnected()) {
+    group->AddIdleSocket(std::move(socket));
+    group->DecrementActiveSocketCount();
+  } else {
+    socket.reset();
+    group->DecrementActiveSocketCount();
+  }
   return 0;
 }
+
 void TransportClientSocketPool::CloseIdleSockets(
     const ClientSocketPool::GroupId &group_id) {}
-int TransportClientSocketPool::IdleSocketCount() const { return 0; }
+
+int TransportClientSocketPool::IdleSocketCount() const { return idle_socket_count_; }
+
 size_t TransportClientSocketPool::IdleSocketCountInGroup(
     const ClientSocketPool::GroupId &group_id) const {
-  return 0;
+  auto it = group_map_.find(group_id);
+  if (it == group_map_.end()) {
+    return -1;
+  }
+  return it->second->idle_sockets().size();
 }
 
 TransportClientSocketPool::Group *TransportClientSocketPool::GetOrCreateGroup(
