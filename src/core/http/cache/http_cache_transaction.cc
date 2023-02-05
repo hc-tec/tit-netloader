@@ -15,13 +15,17 @@ HttpCacheTransaction::HttpCacheTransaction(HttpCache *cache)
 
 int HttpCacheTransaction::Start(HttpRequestInfo *request_info) {
   request_info_ = request_info;
-  int rv = DoPrepareCache();
-  if (rv != OK) return rv;
-  rv = DoSendRequest();
-  if (rv != OK) return rv;
-  rv = DoReadResponse();
-  if (rv != OK) return rv;
+  int rv = OK;
+  do {
+    rv = DoPrepareCache();
+    if (rv != OK) break;
+    rv = DoSendRequest();
+    if (rv != OK) break;
+    rv = DoReadResponse();
+    if (rv != OK) break;
+  } while (false);
   network_trans_->End();
+  return rv;
 }
 
 int HttpCacheTransaction::Restart() { return 0; }

@@ -26,7 +26,9 @@ class URL {
 
   const std::string& scheme() { return scheme_; }
 
-  const std::string& host() { return host_; }
+  std::string host() {
+      return host_;
+  }
 
   void set_port(uint32 port) { port_ = port; }
   uint32 port() const { return port_; }

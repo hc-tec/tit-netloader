@@ -54,9 +54,9 @@ int response_status_cb(http_parser* p, const char* buf, size_t len)
 {
   HttpResponseParser* parser = static_cast<HttpResponseParser*>(p->data);
   parser->response_info()->status = HttpStatus::HttpStatusMap[p->status_code];
-  LOG(TRACE) << "response status: "
-             << p->status_code << " "
-             << std::string(buf, len);
+//  LOG(TRACE) << "response status: "
+//             << p->status_code << " "
+//             << std::string(buf, len);
   return 0;
 }
 
@@ -80,7 +80,7 @@ int header_value_cb(http_parser* p, const char* buf, size_t len)
 
 int headers_complete_cb(http_parser* p)
 {
-  LOG(TRACE) << "header finish";
+//  LOG(TRACE) << "header finish";
   HttpResponseParser* parser = static_cast<HttpResponseParser*>(p->data);
 //  messages[num_messages].should_keep_alive = http_should_keep_alive(parser);
   return 0;
@@ -100,7 +100,7 @@ int body_cb(http_parser* p, const char* buf, size_t len)
   HttpResponseParser* parser = static_cast<HttpResponseParser*>(p->data);
   HttpResponseInfo* response_info = parser->response_info();
   response_info->body->Buffer(const_cast<char*>(buf), len);
-  LOG(TRACE) << "body read: " << std::string(buf, len);
+//  LOG(TRACE) << "body read: " << std::string(buf, len);
   check_body_is_final(p);
   return 0;
 }
@@ -110,7 +110,7 @@ int body_cb(http_parser* p, const char* buf, size_t len)
 int message_complete_cb(http_parser* p)
 {
   HttpResponseParser* parser = static_cast<HttpResponseParser*>(p->data);
-  LOG(TRACE) << "message finish";
+//  LOG(TRACE) << "message finish";
   return 0;
 }
 
