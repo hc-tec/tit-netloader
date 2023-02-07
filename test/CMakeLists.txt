@@ -11,8 +11,6 @@ foreach(TEST_FILE ${ALL_TEST_FILES})
             PROPERTIES OUTPUT_NAME ${TEST_TARGET}
             )
 
-    link_directories(third_party)
-
     target_link_libraries(${TEST_TARGET}_test PRIVATE net_loader)
 
     add_test(NAME ${TEST_TARGET}_test COMMAND ${TEST_TARGET}_test)
