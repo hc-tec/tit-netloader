@@ -9,21 +9,16 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 add_compile_options(-Wall -O0 -std=c++17 -g -Wno-sign-compare -Wno-class-memaccess -Wno-strict-aliasing)
 
 
-# build with openssl 1.1.0+
-option(WITH_OPENSSL "build with openssl" ON)
-
 
 include_directories(src)
-
+include_directories(third_party/http-parser)
 # link dir of libhttp_parser.so
-link_directories(/usr/local/lib)
-
-link_libraries(co)
-link_libraries(backtrace)
-link_libraries(http_parser)
+link_directories(third_party/http-parser)
 
 add_subdirectory(src/core)
 add_subdirectory(test)
+add_subdirectory(third_party/cocoyaxi)
+
 
 link_directories(third_party)
 
