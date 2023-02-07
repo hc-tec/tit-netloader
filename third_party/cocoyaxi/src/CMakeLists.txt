@@ -45,7 +45,7 @@ if(WITH_LIBCURL)
 endif()
 #if(WITH_LIBCURL OR WITH_OPENSSL)
     find_package(OpenSSL 1.1.0 REQUIRED)
-#    target_compile_definitions(co PRIVATE HAS_OPENSSL=1)
+    target_compile_definitions(co PRIVATE HAS_OPENSSL=1)
     target_link_libraries(co PRIVATE OpenSSL::SSL OpenSSL::Crypto)
     if(WIN32)
         # FindOpenSSL.cmake shipped in CMake < 3.21.0 doesn't properly propagate
