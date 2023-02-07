@@ -34,6 +34,8 @@ class HttpStream {
     virtual void OnResponseBodyReceived(HttpRequestInfo* request_info,
                                         HttpResponseInfo* response_info,
                                         const std::string& raw_response) = 0;
+    virtual void OnResponseAllReceived(HttpRequestInfo* request_info,
+                                        HttpResponseInfo* response_info) = 0;
     virtual void OnConnectClosed(HttpRequestInfo* request_info,
                                  HttpResponseInfo* response_info) = 0;
   };

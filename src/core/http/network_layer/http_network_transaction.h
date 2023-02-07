@@ -46,7 +46,8 @@ class HttpNetworkTransaction :
                       bool need_host_resolve,
                       const std::string& dns_ip);
   void OnHostResolvedError(HttpRequestInfo* request_info);
-
+  void OnResponseAllReceived(HttpRequestInfo *request_info,
+                             HttpResponseInfo *response_info) override;
 
  private:
   bool NeedHostResolve();

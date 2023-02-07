@@ -53,6 +53,11 @@ class HttpRequestObserverTest : public net::HttpRequestObserver {
                        net::HttpResponseInfo *response_info) override {
     LOG(INFO) << "HttpRequestObserverTest" " OnConnectClosed ";
   }
+  void OnResponseAllReceived(net::HttpNetworkSession *session,
+                             net::HttpRequestInfo *request_info,
+                             net::HttpResponseInfo *response_info) override {
+    LOG(INFO) << "HttpRequestObserverTest" " OnResponseAllReceived ";
+  }
 };
 
 void send_request(const char *url,
@@ -82,12 +87,12 @@ void send_request(const char *url,
 }
 
 int main() {
-  for (int i = 0; i < 10; ++i) {
+  for (int i = 0; i < 1; ++i) {
     go([]() {
       net::HttpRequestHeaders headers;
       std::unique_ptr<net::HttpRequestBody> body =
           std::make_unique<net::HttpRequestBufferBody>("application/json", "{}");
-      send_request("http://baidu.com", net::Method::GET,
+      send_request("https://baidu.com", net::Method::GET,
                    headers, std::move(body));
     });
   }

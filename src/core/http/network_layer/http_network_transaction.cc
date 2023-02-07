@@ -145,9 +145,6 @@ void HttpNetworkTransaction::OnResponseBodyReceived(
                                              raw_response);
     }
   }
-  if (response_info->headers.GetHeader("Connection") == "close") {
-    OnConnectClosed(request_info, response_info);
-  }
 }
 
 void HttpNetworkTransaction::OnHostResolved(HttpRequestInfo* request_info,
@@ -190,6 +187,21 @@ void HttpNetworkTransaction::OnConnectClosed(HttpRequestInfo* request_info,
     }
   }
 
+}
+
+void HttpNetworkTransaction::OnResponseAllReceived(
+    HttpRequestInfo* request_info, HttpResponseInfo* response_info) {
+  LOG(INFO) << "OnResponseAllReceived";
+  auto& observers = session_->network_context()->url_request_observers_;
+  for (auto& observer : observers) {
+    auto observer_share = observer.lock();
+    if (observer_share.use_count()) {
+      observer_share->OnResponseAllReceived(session_, request_info, response_info);
+    }
+  }
+  if (response_info->headers.GetHeader("Connection") == "close") {
+    OnConnectClosed(request_info, response_info);
+  }
 }
 
 }  // namespace net

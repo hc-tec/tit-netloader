@@ -45,6 +45,10 @@ int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
   response_info_->url = request_info_->url;
   response_info_->address = request_info_->address;
   response_info_->body = std::make_shared<HttpResponseBufferBody>();
+  if (request_info_->body == nullptr) {
+    request_info_->body = std::make_shared<HttpRequestBufferBody>(
+        "text/plain; charset=UTF-8", "");
+  }
   request_info_->body->DeclareHeaders(request_info_->headers);
   std::string request_line = request_info_->GenerateRequestLine(
       request_params_->protocol_type);
@@ -89,7 +93,7 @@ int HttpBasicStream::ReadResponseHeaders() {
 int HttpBasicStream::ReadResponseBody() {
   int remain = response_parser_->RemainSize();
   if (remain <= 0) {
-    delegate_->OnResponseBodyReceived(request_info_, response_info_, "");
+    delegate_->OnResponseAllReceived(request_info_, response_info_);
     return OK;
   }
 
@@ -107,6 +111,7 @@ int HttpBasicStream::ReadResponseBody() {
     delegate_->OnResponseBodyReceived(request_info_, response_info_,
                                       std::string(buf, buf_size));
   }
+  delegate_->OnResponseAllReceived(request_info_, response_info_);
   return OK;
 }
 
