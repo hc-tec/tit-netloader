@@ -56,5 +56,7 @@ void IOBuffer::Forward(int offset) {
 
 IOBuffer::~IOBuffer() {}
 
+size_t IOBuffer::GetPosition() { return pos_; }
+
 }  // namespace net
 }  // namespace tit

@@ -29,6 +29,7 @@ class IOBuffer {
 
   virtual size_t Read(std::string_view* buf, size_t buf_size);
   virtual size_t Buffer(char* buf, size_t buf_size);
+  virtual size_t GetPosition();
   virtual size_t GetSize();
 
  protected:
