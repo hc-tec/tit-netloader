@@ -39,6 +39,8 @@ class URLRequestContextBuilder {
 
   HttpNetworkSession* network_session() { return network_session_.get(); }
 
+  NetworkContext* network_context() { return network_context_; }
+
  private:
 
   void SetHttpNetworkSessionComponents(HttpNetworkSession* session,

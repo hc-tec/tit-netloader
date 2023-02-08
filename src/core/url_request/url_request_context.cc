@@ -55,5 +55,9 @@ void URLRequestContext::RemoveHttpRequestObserver(
   }
 }
 
+NetworkContext *URLRequestContext::network_context() {
+  return url_request_context_builder_->network_context();
+}
+
 }  // namespace net
 }  // namespace tit

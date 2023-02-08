@@ -18,7 +18,9 @@ class HttpNetworkTransaction;
 class NetworkService;
 class ResourceScheduler;
 class RequestParams;
+class URLRequestObserver;
 class URLLoaderInterceptor;
+class URLRequest;
 class URLRequestJobFactory;
 class URLRequestContextBuilder;
 
@@ -63,14 +65,23 @@ class NetworkContext {
                           std::unique_ptr<URLRequestJobFactory::ProtocolHandler>
                               protocol_handler);
 
+  void AddURLRequestObserver(
+      std::weak_ptr<URLRequestObserver> observer);
+
+  void RemoveURLRequestObserver(
+      std::weak_ptr<URLRequestObserver> observer);
+
  private:
+  friend URLRequest;
+
   std::unique_ptr<HostResolver> host_resolver_;
   std::unique_ptr<ResourceScheduler> resource_scheduler_;
   std::unique_ptr<URLRequestJobFactory> url_request_job_factory_;
   std::unique_ptr<URLRequestContextBuilder> url_request_context_builder_;
 
   std::vector<std::shared_ptr<URLLoaderInterceptor>> url_loader_interceptors_;
-
+  // provide coarse-grained observer API, observes all URLRequest
+  std::vector<std::weak_ptr<URLRequestObserver>> url_request_observers_;
 };
 
 

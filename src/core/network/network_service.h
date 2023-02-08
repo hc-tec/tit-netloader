@@ -19,6 +19,7 @@ class NetworkContext;
 class RequestManager;
 class URLLoaderFactory;
 class URLLoaderInterceptor;
+class URLRequestObserver;
 class HttpRequestObserver;
 
 class NetworkService : public URLLoader::Delegate {
@@ -41,6 +42,12 @@ class NetworkService : public URLLoader::Delegate {
   bool SetProtocolHandler(const std::string& scheme,
                           std::unique_ptr<URLRequestJobFactory::ProtocolHandler>
                           protocol_handler);
+
+  void AddURLRequestObserver(
+      std::weak_ptr<URLRequestObserver> observer);
+
+  void RemoveURLRequestObserver(
+      std::weak_ptr<URLRequestObserver> observer);
 
  private:
   friend URLLoaderInterceptor;

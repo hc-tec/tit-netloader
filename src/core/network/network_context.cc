@@ -56,5 +56,22 @@ bool NetworkContext::SetProtocolHandler(
       scheme, std::move(protocol_handler));
 }
 
+void NetworkContext::AddURLRequestObserver(
+    std::weak_ptr<URLRequestObserver> observer) {
+  url_request_observers_.push_back(observer);
+}
+
+void NetworkContext::RemoveURLRequestObserver(
+    std::weak_ptr<URLRequestObserver> observer) {
+  int size = url_loader_interceptors_.size();
+  for (int i = 0; i < size; ++i) {
+    if (typeid(url_loader_interceptors_[i]) == typeid(observer)) {
+      url_loader_interceptors_.erase(
+          url_loader_interceptors_.begin() + i);
+      break;
+    }
+  }
+}
+
 }  // namespace net
 }  // namespace tit

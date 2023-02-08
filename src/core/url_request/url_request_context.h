@@ -17,6 +17,7 @@ class HostResolver;
 class HttpNetworkTransaction;
 class HttpRequestObserver;
 class HttpTransactionFactory;
+class NetworkContext;
 class ResourceScheduler;
 class URLRequestJobFactory;
 class URLRequestContextBuilder;
@@ -61,6 +62,8 @@ class URLRequestContext {
       HttpTransactionFactory* transaction_factory) {
     http_transaction_factory_ = transaction_factory;
   }
+
+  NetworkContext* network_context();
 
   void AddHttpRequestObserver(
       std::weak_ptr<HttpRequestObserver> observer);

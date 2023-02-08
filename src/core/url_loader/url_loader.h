@@ -59,7 +59,7 @@ class URLLoader : public URLRequest::Delegate {
   URLRequestContextBuilder* url_request_context_builder_;
 
   std::unique_ptr<URLRequestContext> url_request_context_;
-  std::unique_ptr<URLRequest> url_request_;
+  std::shared_ptr<URLRequest> url_request_;
 
 };
 

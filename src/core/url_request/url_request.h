@@ -12,16 +12,18 @@
 #include "core/base/request_priority.h"
 #include "core/base/url/url.h"
 #include "core/http/request/http_request_info.h"
-#include "core/http/response/http_response_info.h"
+//#include "core/http/response/http_response_info.h"
+#include "core/http/http_request_observer.h"
 
 namespace tit {
 namespace net {
 
+struct HttpResponseInfo;
 class URLRequestContext;
 class URLRequestJob;
 
 
-class URLRequest {
+class URLRequest : public HttpRequestObserver {
  public:
 
   class Delegate {
@@ -59,6 +61,16 @@ class URLRequest {
 
   void Start();
 
+  // notify observers
+  void OnRequestStart();
+  void OnRequestEnd();
+  void OnRequestError(int err_code);
+
+  // HttpRequestObserver
+  void OnResponseAllReceived(HttpNetworkSession* session,
+                             HttpRequestInfo* request_info,
+                             HttpResponseInfo* response_info) override;
+
  private:
 
   Delegate* delegate_;
@@ -68,7 +80,7 @@ class URLRequest {
   std::vector<URL> url_chain_;
   std::string method_;
   HttpRequestInfo request_info_;
-  HttpResponseInfo response_info_;
+  HttpResponseInfo* response_info_;
   RequestPriority priority_;
 
   URL redirect_url_;
