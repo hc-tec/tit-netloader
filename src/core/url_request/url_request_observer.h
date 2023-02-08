@@ -17,10 +17,10 @@ class HttpResponseInfo;
 class URLRequestObserver {
  public:
     virtual void OnRequestStart(URLRequest* request,
-                              HttpRequestInfo* requestInfo) = 0;
+                              HttpRequestInfo* requestInfo) {};
     virtual void OnRequestEnd(URLRequest* request,
-                              HttpResponseInfo* responseInfo) = 0;
-    virtual void OnRequestError(URLRequest* request, int err_code) = 0;
+                              HttpResponseInfo* responseInfo) {};
+    virtual void OnRequestError(URLRequest* request, int err_code) {};
 };
 
 }  // namespace net
