@@ -64,7 +64,7 @@ int header_field_cb(http_parser* p, const char* buf, size_t len)
 {
   HttpResponseParser* parser = static_cast<HttpResponseParser*>(p->data);
   parser->cur_header_field = std::string(buf, len);
-  LOG(TRACE) << "header field: " << std::string(buf, len).data();
+//  LOG(TRACE) << "header field: " << std::string(buf, len).data();
   return 0;
 }
 
@@ -74,7 +74,7 @@ int header_value_cb(http_parser* p, const char* buf, size_t len)
   HttpResponseInfo* response_info = parser->response_info();
   response_info->headers.PutHeaders(parser->cur_header_field,
                                     std::string(buf, len));
-  LOG(TRACE) << "header value: " << std::string(buf, len);
+//  LOG(TRACE) << "header value: " << std::string(buf, len);
   return 0;
 }
 
@@ -92,7 +92,7 @@ void check_body_is_final(const http_parser* p)
 
   int is_final = http_body_is_final(p);
   parser->set_body_final(true);
-  LOG(TRACE) << "body is final" << is_final;
+//  LOG(TRACE) << "body is final" << is_final;
 }
 
 int body_cb(http_parser* p, const char* buf, size_t len)
