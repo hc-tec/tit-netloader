@@ -17,7 +17,7 @@ class HttpCache;
 class HttpCacheTransaction : public HttpTransaction {
  public:
 
-  explicit HttpCacheTransaction(HttpCache* cache);
+  HttpCacheTransaction(URLRequestContext* url_request_context,  HttpCache* cache);
 
   int Start(HttpRequestInfo* request_info) override;
   int Restart() override;

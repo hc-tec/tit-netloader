@@ -65,13 +65,7 @@ void send_request(const char *url,
                   net::HttpRequestHeaders headers,
                   std::unique_ptr<net::HttpRequestBody> body) {
   net::NetworkService* service = net::GetNetworkService();
-  std::shared_ptr<HttpRequestObserverTest> httpRequestObserverTest =
-      std::make_shared<HttpRequestObserverTest>();
-//    httpRequestObserverTest.reset();
-  std::weak_ptr<HttpRequestObserverTest> httpRequestObserverTest_weak(
-      HttpRequestObserverTest);
-  service->AddHttpRequestObserver(httpRequestObserverTest);
-//    service->RemoveHttpRequestObserver(httpRequestObserverTest_weak);
+
   net::RequestParams params;
   params.request_info.url = net::URL(url);
   params.request_info.method = method;
@@ -80,6 +74,13 @@ void send_request(const char *url,
 //    params.request_info.SetAddressByUrl();
   std::unique_ptr<net::URLLoader> loader = service->CreateURLLoader(params);
   if (loader != nullptr) {
+    std::shared_ptr<HttpRequestObserverTest> httpRequestObserverTest =
+        std::make_shared<HttpRequestObserverTest>();
+//    httpRequestObserverTest.reset();
+    std::weak_ptr<HttpRequestObserverTest> httpRequestObserverTest_weak(
+        HttpRequestObserverTest);
+    loader->AddHttpRequestObserver(httpRequestObserverTest);
+//    loader->RemoveHttpRequestObserver(httpRequestObserverTest_weak);
     loader->Start();
   } else {
 

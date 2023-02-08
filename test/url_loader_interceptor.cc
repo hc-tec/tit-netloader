@@ -21,7 +21,7 @@ class URLLoaderInterceptorTest : public net::URLLoaderInterceptor {
   bool Interceptor(net::NetworkService* service,
                    net::RequestParams* params) override {
     if (params->request_info.method == net::Method::HEAD) {
-      params->request_info.method = net::Method::POST;
+      params->request_info.method = net::Method::GET;
     }
     return true;
   }
@@ -36,7 +36,7 @@ int main() {
         std::make_shared<URLLoaderInterceptorTest>());
 
     net::RequestParams params;
-    params.request_info.url = net::URL("http://148.70.204.53:3001/signin/");
+    params.request_info.url = net::URL("http://148.70.204.53:3001/static/rest_framework/css/prettify.css");
     params.request_info.method = net::Method::HEAD;
     params.request_info.SetAddressByUrl();
     std::unique_ptr<net::URLLoader> loader = service->CreateURLLoader(params);

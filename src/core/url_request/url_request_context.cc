@@ -5,10 +5,11 @@
 #include "url_request_context.h"
 
 
-#include "core/http/http_transaction_factory.h"
 #include "core/network/host_resolver.h"
 #include "core/network/network_context.h"
 #include "core/network/resource_scheduler.h"
+#include "core/http/http_request_observer.h"
+#include "core/http/http_transaction_factory.h"
 #include "core/http/network_layer/http_network_session.h"
 #include "core/url_request/url_request_job_factory.h"
 #include "core/url_request/url_request_context_builder.h"
@@ -37,6 +38,22 @@ std::unique_ptr<URLRequest> URLRequestContext::CreateURLRequest(
   return url_request;
 }
 
+void URLRequestContext::AddHttpRequestObserver(
+    std::weak_ptr<HttpRequestObserver> observer) {
+  url_request_observers_.push_back(observer);
+}
+
+void URLRequestContext::RemoveHttpRequestObserver(
+    std::weak_ptr<HttpRequestObserver> observer) {
+  int size = url_request_observers_.size();
+  for (int i = 0; i < size; ++i) {
+    if (typeid(url_request_observers_[i]) == typeid(observer)) {
+      url_request_observers_.erase(
+          url_request_observers_.begin() + i);
+      break;
+    }
+  }
+}
 
 }  // namespace net
 }  // namespace tit

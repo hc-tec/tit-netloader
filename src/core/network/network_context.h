@@ -15,7 +15,6 @@ namespace net {
 
 class HostResolver;
 class HttpNetworkTransaction;
-class HttpRequestObserver;
 class NetworkService;
 class ResourceScheduler;
 class RequestParams;
@@ -64,22 +63,14 @@ class NetworkContext {
                           std::unique_ptr<URLRequestJobFactory::ProtocolHandler>
                               protocol_handler);
 
-  void AddHttpRequestObserver(
-      std::weak_ptr<HttpRequestObserver> observer);
-
-  void RemoveHttpRequestObserver(
-      std::weak_ptr<HttpRequestObserver> observer);
-
  private:
-  friend HttpNetworkTransaction;
-
   std::unique_ptr<HostResolver> host_resolver_;
   std::unique_ptr<ResourceScheduler> resource_scheduler_;
   std::unique_ptr<URLRequestJobFactory> url_request_job_factory_;
   std::unique_ptr<URLRequestContextBuilder> url_request_context_builder_;
 
   std::vector<std::shared_ptr<URLLoaderInterceptor>> url_loader_interceptors_;
-  std::vector<std::weak_ptr<HttpRequestObserver>> url_request_observers_;
+
 };
 
 

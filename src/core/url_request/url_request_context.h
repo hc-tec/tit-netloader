@@ -14,6 +14,8 @@ namespace net {
 
 struct RequestParams;
 class HostResolver;
+class HttpNetworkTransaction;
+class HttpRequestObserver;
 class HttpTransactionFactory;
 class ResourceScheduler;
 class URLRequestJobFactory;
@@ -60,8 +62,14 @@ class URLRequestContext {
     http_transaction_factory_ = transaction_factory;
   }
 
+  void AddHttpRequestObserver(
+      std::weak_ptr<HttpRequestObserver> observer);
+
+  void RemoveHttpRequestObserver(
+      std::weak_ptr<HttpRequestObserver> observer);
+
  private:
-//  friend URLRequestContextBuilder;
+  friend HttpNetworkTransaction;
 
   const RequestParams* request_params_;
   HostResolver* host_resolver_;
@@ -72,6 +80,8 @@ class URLRequestContext {
   URLRequest* url_request_;
 
   HttpTransactionFactory* http_transaction_factory_;
+
+  std::vector<std::weak_ptr<HttpRequestObserver>> url_request_observers_;
 };
 
 }  // namespace net

@@ -42,12 +42,6 @@ class NetworkService : public URLLoader::Delegate {
                           std::unique_ptr<URLRequestJobFactory::ProtocolHandler>
                           protocol_handler);
 
-  void AddHttpRequestObserver(
-      std::weak_ptr<HttpRequestObserver> observer);
-
-  void RemoveHttpRequestObserver(
-      std::weak_ptr<HttpRequestObserver> observer);
-
  private:
   friend URLLoaderInterceptor;
 

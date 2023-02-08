@@ -12,12 +12,14 @@ namespace net {
 
 class HttpTransaction;
 class HttpNetworkSession;
+class URLRequestContext;
 
 class HttpTransactionFactory {
  public:
   virtual ~HttpTransactionFactory(){}
 
-  virtual std::unique_ptr<HttpTransaction> CreateTransaction() = 0;
+  virtual std::unique_ptr<HttpTransaction> CreateTransaction(
+      URLRequestContext* url_request_context) = 0;
 
   virtual HttpNetworkSession* GetSession() = 0;
 };

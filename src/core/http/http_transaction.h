@@ -10,9 +10,12 @@ namespace net {
 
 struct HttpRequestInfo;
 struct HttpResponseInfo;
+class URLRequestContext;
 
 class HttpTransaction {
  public:
+  HttpTransaction(URLRequestContext* url_request_context);
+
   virtual ~HttpTransaction() {}
 
   virtual int Start(HttpRequestInfo* request_info) = 0;
@@ -23,6 +26,8 @@ class HttpTransaction {
 
   virtual const HttpResponseInfo* GetResponseInfo() const = 0;
 
+ protected:
+    URLRequestContext* url_request_context_;
 };
 
 }  // namespace net

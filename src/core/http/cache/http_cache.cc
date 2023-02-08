@@ -13,8 +13,9 @@ namespace net {
 HttpCache::HttpCache(std::unique_ptr<HttpTransactionFactory> network_layer)
     : network_layer_(std::move(network_layer)) {}
 
-std::unique_ptr<HttpTransaction> HttpCache::CreateTransaction() {
-  return std::make_unique<HttpCacheTransaction>(this);
+std::unique_ptr<HttpTransaction> HttpCache::CreateTransaction(
+    URLRequestContext* url_request_context) {
+  return std::make_unique<HttpCacheTransaction>(url_request_context, this);
 }
 
 HttpNetworkSession* HttpCache::GetSession() { return nullptr; }

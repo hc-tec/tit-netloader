@@ -64,16 +64,6 @@ bool NetworkService::SetProtocolHandler(
       scheme, std::move(protocol_handler));
 }
 
-void NetworkService::AddHttpRequestObserver(
-    std::weak_ptr<HttpRequestObserver> observer) {
-  network_context_->AddHttpRequestObserver(observer);
-}
-
-void NetworkService::RemoveHttpRequestObserver(
-    std::weak_ptr<HttpRequestObserver> observer) {
-  network_context_->RemoveHttpRequestObserver(observer);
-}
-
 
 
 }  // namespace net

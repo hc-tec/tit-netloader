@@ -15,6 +15,7 @@ namespace tit {
 namespace net {
 struct RequestParams;
 
+class HttpRequestObserver;
 class NetworkContext;
 class ResourceScheduler;
 class URLRequestContext;
@@ -41,6 +42,12 @@ class URLLoader : public URLRequest::Delegate {
   void set_url_request_context_builder(URLRequestContextBuilder* builder) {
     url_request_context_builder_ = builder;
   }
+
+  void AddHttpRequestObserver(
+      std::weak_ptr<HttpRequestObserver> observer);
+
+  void RemoveHttpRequestObserver(
+      std::weak_ptr<HttpRequestObserver> observer);
 
  private:
 

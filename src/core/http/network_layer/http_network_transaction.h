@@ -20,7 +20,7 @@ class HttpNetworkTransaction :
     public HttpTransaction,
     public HttpStream::Delegate {
  public:
-  explicit HttpNetworkTransaction(HttpNetworkSession* session);
+  HttpNetworkTransaction(URLRequestContext* url_request_context, HttpNetworkSession* session);
   ~HttpNetworkTransaction() override;
 
   // HttpTransaction

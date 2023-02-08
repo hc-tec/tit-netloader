@@ -12,8 +12,9 @@ namespace net {
 HttpNetworkLayer::HttpNetworkLayer(HttpNetworkSession* session)
     : session_(session) {}
 
-std::unique_ptr<HttpTransaction> HttpNetworkLayer::CreateTransaction() {
-  return std::make_unique<HttpNetworkTransaction>(session_);
+std::unique_ptr<HttpTransaction> HttpNetworkLayer::CreateTransaction(
+    URLRequestContext* url_request_context) {
+  return std::make_unique<HttpNetworkTransaction>(url_request_context, session_);
 }
 
 HttpNetworkSession* HttpNetworkLayer::GetSession() { return session_; }

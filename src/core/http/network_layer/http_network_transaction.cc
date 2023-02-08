@@ -16,13 +16,17 @@
 #include "core/socket/client_socket_handle.h"
 #include "core/socket/tcp/transport_client_socket.h"
 #include "core/socket/client_socket_pool.h"
+#include "core/url_request/url_request_context.h"
 #include "core/url_request/url_request_context_builder.h"
 
 namespace tit {
 namespace net {
 
-HttpNetworkTransaction::HttpNetworkTransaction(HttpNetworkSession *session)
-    : session_(session) {}
+HttpNetworkTransaction::HttpNetworkTransaction(
+    URLRequestContext* url_request_context,
+    HttpNetworkSession *session)
+    : HttpTransaction(url_request_context),
+      session_(session) {}
 
 HttpNetworkTransaction::~HttpNetworkTransaction() {}
 
@@ -92,7 +96,7 @@ int HttpNetworkTransaction::DoHostResolve() {
 
 void HttpNetworkTransaction::OnConnected(HttpRequestInfo* request_info) {
   LOG(INFO) << "OnConnected";
-  auto& observers = session_->network_context()->url_request_observers_;
+  auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
     auto observer_share = observer.lock();
     if (observer_share.use_count()) {
@@ -104,7 +108,7 @@ void HttpNetworkTransaction::OnConnected(HttpRequestInfo* request_info) {
 void HttpNetworkTransaction::OnBeforeRequest(HttpRequestInfo *request_info,
                                              std::string &request_msg) {
   LOG(INFO) << "OnBeforeRequest";
-  auto& observers = session_->network_context()->url_request_observers_;
+  auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
     auto observer_share = observer.lock();
     if (observer_share.use_count()) {
@@ -118,7 +122,7 @@ void HttpNetworkTransaction::OnResponseHeaderReceived(
     HttpResponseInfo *response_info,
     const std::string& raw_response) {
   LOG(INFO) << "OnResponseHeaderReceived";
-  auto& observers = session_->network_context()->url_request_observers_;
+  auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
     auto observer_share = observer.lock();
     if (observer_share.use_count()) {
@@ -135,7 +139,7 @@ void HttpNetworkTransaction::OnResponseBodyReceived(
     HttpResponseInfo *response_info,
     const std::string& raw_response) {
   LOG(INFO) << "OnResponseBodyReceived";
-  auto& observers = session_->network_context()->url_request_observers_;
+  auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
     auto observer_share = observer.lock();
     if (observer_share.use_count()) {
@@ -151,7 +155,7 @@ void HttpNetworkTransaction::OnHostResolved(HttpRequestInfo* request_info,
                                             bool need_host_resolve,
                                             const std::string& dns_ip) {
   LOG(INFO) << "OnHostResolved";
-  auto& observers = session_->network_context()->url_request_observers_;
+  auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
     auto observer_share = observer.lock();
     if (observer_share.use_count()) {
@@ -166,7 +170,7 @@ void HttpNetworkTransaction::OnHostResolved(HttpRequestInfo* request_info,
 void HttpNetworkTransaction::OnHostResolvedError(
     HttpRequestInfo* request_info) {
   LOG(INFO) << "OnHostResolved";
-  auto& observers = session_->network_context()->url_request_observers_;
+  auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
     auto observer_share = observer.lock();
     if (observer_share.use_count()) {
@@ -179,7 +183,7 @@ void HttpNetworkTransaction::OnConnectClosed(HttpRequestInfo* request_info,
                                              HttpResponseInfo* response_info) {
   LOG(INFO) << "OnConnectClosed";
   stream_->Close();
-  auto& observers = session_->network_context()->url_request_observers_;
+  auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
     auto observer_share = observer.lock();
     if (observer_share.use_count()) {
@@ -192,7 +196,7 @@ void HttpNetworkTransaction::OnConnectClosed(HttpRequestInfo* request_info,
 void HttpNetworkTransaction::OnResponseAllReceived(
     HttpRequestInfo* request_info, HttpResponseInfo* response_info) {
   LOG(INFO) << "OnResponseAllReceived";
-  auto& observers = session_->network_context()->url_request_observers_;
+  auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
     auto observer_share = observer.lock();
     if (observer_share.use_count()) {

@@ -4,6 +4,7 @@
 
 #include "url_loader.h"
 
+#include "core/http/http_request_observer.h"
 #include "core/http/http_transaction_factory.h"
 #include "core/network/host_resolver.h"
 #include "core/network/network_context.h"
@@ -44,6 +45,16 @@ URLLoader::~URLLoader() {
 
 void URLLoader::Start() {
   url_request_->Start();
+}
+
+void URLLoader::AddHttpRequestObserver(
+    std::weak_ptr<HttpRequestObserver> observer) {
+  url_request_context_->AddHttpRequestObserver(observer);
+}
+
+void URLLoader::RemoveHttpRequestObserver(
+    std::weak_ptr<HttpRequestObserver> observer) {
+  url_request_context_->RemoveHttpRequestObserver(observer);
 }
 
 }  // namespace net

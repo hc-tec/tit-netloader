@@ -17,13 +17,12 @@ class HttpCacheTransaction;
 class HttpCache : public HttpTransactionFactory {
  public:
 
-  class Transaction;
-
   HttpCache(std::unique_ptr<HttpTransactionFactory> network_layer);
 
   ~HttpCache() override;
 
-  std::unique_ptr<HttpTransaction> CreateTransaction() override;
+  std::unique_ptr<HttpTransaction> CreateTransaction(
+      URLRequestContext* url_request_context) override;
 
   HttpNetworkSession* GetSession() override;
 

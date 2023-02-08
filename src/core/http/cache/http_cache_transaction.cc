@@ -10,8 +10,11 @@
 namespace tit {
 namespace net {
 
-HttpCacheTransaction::HttpCacheTransaction(HttpCache *cache)
-    : cache_(cache) {}
+HttpCacheTransaction::HttpCacheTransaction(
+    URLRequestContext* url_request_context,
+    HttpCache *cache)
+    : HttpTransaction(url_request_context),
+      cache_(cache) {}
 
 int HttpCacheTransaction::Start(HttpRequestInfo *request_info) {
   request_info_ = request_info;
@@ -37,7 +40,7 @@ const HttpResponseInfo *HttpCacheTransaction::GetResponseInfo() const {
 int HttpCacheTransaction::DoPrepareCache() { return OK; }
 
 int HttpCacheTransaction::DoSendRequest() {
-  network_trans_ = cache_->network_layer_->CreateTransaction();
+  network_trans_ = cache_->network_layer_->CreateTransaction(url_request_context_);
   if (network_trans_.get() == nullptr) return ERR_OUT_OF_MEMORY;
   int rv = network_trans_->Start(request_info_);
   return rv;

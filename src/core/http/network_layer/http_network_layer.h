@@ -17,7 +17,8 @@ class HttpNetworkLayer : public HttpTransactionFactory {
 
   ~HttpNetworkLayer() override;
 
-  std::unique_ptr<HttpTransaction> CreateTransaction() override;
+  std::unique_ptr<HttpTransaction> CreateTransaction(
+      URLRequestContext* url_request_context) override;
 
   HttpNetworkSession* GetSession() override;
 

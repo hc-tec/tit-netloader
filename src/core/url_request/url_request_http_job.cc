@@ -38,7 +38,7 @@ void URLRequestHttpJob::StartTransaction() {
   if (transaction_.get() == nullptr) {
     HttpTransactionFactory* transaction_factory =
         url_request_->context()->transaction_factory();
-    transaction_ = transaction_factory->CreateTransaction();
+    transaction_ = transaction_factory->CreateTransaction(url_request_->context());
     transaction_->Start(url_request_->request_info());
   } else {
     transaction_->Restart();
