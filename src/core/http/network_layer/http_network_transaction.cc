@@ -98,8 +98,8 @@ void HttpNetworkTransaction::OnConnected(HttpRequestInfo* request_info) {
   LOG(INFO) << "OnConnected";
   auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
-    auto observer_share = observer.lock();
-    if (observer_share.use_count()) {
+    if (!observer.expired()) {
+      auto observer_share = observer.lock();
       observer_share->OnConnected(session_, request_info);
     }
   }
@@ -110,8 +110,8 @@ void HttpNetworkTransaction::OnBeforeRequest(HttpRequestInfo *request_info,
   LOG(INFO) << "OnBeforeRequest";
   auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
-    auto observer_share = observer.lock();
-    if (observer_share.use_count()) {
+    if (!observer.expired()) {
+      auto observer_share = observer.lock();
       observer_share->OnBeforeRequest(session_, request_info, request_msg);
     }
   }
@@ -124,8 +124,8 @@ void HttpNetworkTransaction::OnResponseHeaderReceived(
   LOG(INFO) << "OnResponseHeaderReceived";
   auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
-    auto observer_share = observer.lock();
-    if (observer_share.use_count()) {
+    if (!observer.expired()) {
+      auto observer_share = observer.lock();
       observer_share->OnResponseHeaderReceived(session_,
                                                request_info,
                                                response_info,
@@ -141,8 +141,8 @@ void HttpNetworkTransaction::OnResponseBodyReceived(
   LOG(INFO) << "OnResponseBodyReceived";
   auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
-    auto observer_share = observer.lock();
-    if (observer_share.use_count()) {
+    if (!observer.expired()) {
+      auto observer_share = observer.lock();
       observer_share->OnResponseBodyReceived(session_,
                                              request_info,
                                              response_info,
@@ -157,8 +157,8 @@ void HttpNetworkTransaction::OnHostResolved(HttpRequestInfo* request_info,
   LOG(INFO) << "OnHostResolved";
   auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
-    auto observer_share = observer.lock();
-    if (observer_share.use_count()) {
+    if (!observer.expired()) {
+      auto observer_share = observer.lock();
       observer_share->OnHostResolved(session_,
                                      request_info,
                                      need_host_resolve,
@@ -172,8 +172,8 @@ void HttpNetworkTransaction::OnHostResolvedError(
   LOG(INFO) << "OnHostResolved";
   auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
-    auto observer_share = observer.lock();
-    if (observer_share.use_count()) {
+    if (!observer.expired()) {
+      auto observer_share = observer.lock();
       observer_share->OnHostResolveError(session_, request_info);
     }
   }
@@ -185,8 +185,8 @@ void HttpNetworkTransaction::OnConnectClosed(HttpRequestInfo* request_info,
   stream_->Close();
   auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
-    auto observer_share = observer.lock();
-    if (observer_share.use_count()) {
+    if (!observer.expired()) {
+      auto observer_share = observer.lock();
       observer_share->OnConnectClosed(session_, request_info, response_info);
     }
   }
@@ -198,8 +198,8 @@ void HttpNetworkTransaction::OnResponseAllReceived(
   LOG(INFO) << "OnResponseAllReceived";
   auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
-    auto observer_share = observer.lock();
-    if (observer_share.use_count()) {
+    if (!observer.expired()) {
+      auto observer_share = observer.lock();
       observer_share->OnResponseAllReceived(session_, request_info, response_info);
     }
   }
