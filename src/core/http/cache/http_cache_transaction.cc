@@ -31,7 +31,7 @@ int HttpCacheTransaction::Start(HttpRequestInfo *request_info) {
   return rv;
 }
 
-int HttpCacheTransaction::Restart() { return 0; }
+int HttpCacheTransaction::Restart() { return Start(request_info_); }
 
 const HttpResponseInfo *HttpCacheTransaction::GetResponseInfo() const {
   return nullptr;

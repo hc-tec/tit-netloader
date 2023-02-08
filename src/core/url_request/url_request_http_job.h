@@ -29,11 +29,11 @@ class URLRequestHttpJob : public URLRequestJob {
 
   ~URLRequestHttpJob() override;
 
-  void Start() override;
+  int Start() override;
 
  private:
 
-  void StartTransaction();
+  int StartTransaction();
 
   RequestPriority priority_;
   HttpRequestInfo* request_info_;

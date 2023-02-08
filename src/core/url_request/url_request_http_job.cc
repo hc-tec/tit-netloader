@@ -28,20 +28,20 @@ URLRequestHttpJob::URLRequestHttpJob(URLRequest *url_request)
 
 URLRequestHttpJob::~URLRequestHttpJob() {}
 
-void URLRequestHttpJob::Start() {
+int URLRequestHttpJob::Start() {
   // integrate with cookies
   // then start transaction
-  StartTransaction();
+  return StartTransaction();
 }
 
-void URLRequestHttpJob::StartTransaction() {
+int URLRequestHttpJob::StartTransaction() {
   if (transaction_.get() == nullptr) {
     HttpTransactionFactory* transaction_factory =
         url_request_->context()->transaction_factory();
     transaction_ = transaction_factory->CreateTransaction(url_request_->context());
-    transaction_->Start(url_request_->request_info());
+    return transaction_->Start(url_request_->request_info());
   } else {
-    transaction_->Restart();
+    return transaction_->Restart();
   }
 }
 

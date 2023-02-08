@@ -67,7 +67,7 @@ int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
       return ERR_CONNECTION_FAILED;
     }
   }
-  LOG(INFO) << "Send Request" << request_info_;
+  LOG(INFO) << "Send Request" << request_info_->url;
   LOG(TRACE) << "\n" << request;
   delegate_->OnConnected(request_info_);
   delegate_->OnBeforeRequest(request_info_, request);
@@ -82,7 +82,7 @@ int HttpBasicStream::ReadResponseHeaders() {
     delegate_->OnConnectClosed(request_info_, response_info_);
     return ERR_CONNECTION_CLOSED;
   }
-  LOG(INFO) << "Read Response data: \n" << buf;
+  LOG(INFO) << "ReadResponseHeaders: \n" << buf;
   response_info_->buffer.Buffer(buf, buf_size);
   response_parser_->ParseHeaders();
   delegate_->OnResponseHeaderReceived(request_info_, response_info_,

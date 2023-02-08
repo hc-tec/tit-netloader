@@ -4,6 +4,7 @@
 
 #include "url_request_job.h"
 
+#include "core/base/net_error.h"
 #include "core/url_request/url_request.h"
 #include "log/logging.h"
 
@@ -22,8 +23,9 @@ URLRequestJob::~URLRequestJob() {}
 URLRequestErrorJob::URLRequestErrorJob(URLRequest *request)
     : URLRequestJob(request) {}
 
-void URLRequestErrorJob::Start() {
+int URLRequestErrorJob::Start() {
   LOG(ERROR) << "URLRequestErrorJob execute";
+  return ERR_FAILED;
 }
 
 }  // namespace net

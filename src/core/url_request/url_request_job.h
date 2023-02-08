@@ -21,7 +21,7 @@ class URLRequestJob {
 
   URLRequest* url_request() const { return url_request_; }
 
-  virtual void Start() = 0;
+  virtual int Start() = 0;
 
  protected:
   URLRequest* url_request_;
@@ -32,7 +32,7 @@ class URLRequestErrorJob : public URLRequestJob {
 
   explicit URLRequestErrorJob(URLRequest* request);
 
-  void Start() override;
+  int Start() override;
 };
 
 }  // namespace net
