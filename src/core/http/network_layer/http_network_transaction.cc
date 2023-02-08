@@ -43,12 +43,18 @@ int HttpNetworkTransaction::Start(HttpRequestInfo *request_info) {
   stream_ = stream_factory->RequestStream(client_socket_handle_.get(),
                                           request_info,
                                           this);
-  rv = stream_->SendRequest(&response_info_);
-  if (rv != OK) return rv;
-  rv = stream_->ReadResponseHeaders();
-  if (rv != OK) return rv;
-  rv = stream_->ReadResponseBody();
-  if (rv != OK) return rv;
+  do {
+    rv = stream_->SendRequest(&response_info_);
+    if (rv != OK) break;
+    rv = stream_->ReadResponseHeaders();
+    if (rv != OK) break;
+    rv = stream_->ReadResponseBody();
+    if (rv != OK) break;
+  } while (false);
+  if (rv != OK) {
+    stream_->Close();
+    return rv;
+  }
   LOG(INFO) << "Receive Response: " << response_info_;
   return OK;
 }
@@ -56,10 +62,15 @@ int HttpNetworkTransaction::Start(HttpRequestInfo *request_info) {
 int HttpNetworkTransaction::Restart() { return 0; }
 
 int HttpNetworkTransaction::End() {
+  bool connected = client_socket_handle_.get() != nullptr
+                   && client_socket_handle_->socket() != nullptr
+                   && client_socket_handle_->socket()->IsConnected();
+  if (!connected) return OK;
   HttpStreamFactory* stream_factory = session_->http_stream_factory();
   stream_factory->RecycleStream(
       client_socket_handle_.get(),
       request_info_);
+  return OK;
 }
 
 const HttpResponseInfo *HttpNetworkTransaction::GetResponseInfo() const {
@@ -169,7 +180,7 @@ void HttpNetworkTransaction::OnHostResolved(HttpRequestInfo* request_info,
 
 void HttpNetworkTransaction::OnHostResolvedError(
     HttpRequestInfo* request_info) {
-  LOG(INFO) << "OnHostResolved";
+  LOG(INFO) << "OnHostResolvedError";
   auto& observers = url_request_context_->url_request_observers_;
   for (auto& observer : observers) {
     if (!observer.expired()) {

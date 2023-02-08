@@ -35,6 +35,7 @@ URLLoader::URLLoader(uint64 request_id,
                                   request_params.priority,
                                   request_params,
                                   this);
+  AddHttpRequestObserver(url_request_);
   url_request_->set_request_info(request_params.request_info);
 }
 
