@@ -2,7 +2,7 @@
 file(GLOB_RECURSE CO_SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cc ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 
 
-add_library(net_loader STATIC ${CO_SRC_FILES} url_request/url_request_observer.cc url_request/url_request_observer.h)
+add_library(net_loader STATIC ${CO_SRC_FILES} url_request/url_request_observer.cc url_request/url_request_observer.h base/weak_container.h)
 
 target_include_directories(net_loader
         PUBLIC

@@ -23,6 +23,7 @@ class URLRequestObserverTest : public net::URLRequestObserver {
     LOG(DEBUG) << "OnRequestStart: " << requestInfo->url;
   }
   void OnRequestEnd(net::URLRequest *request,
+                    net::HttpRequestInfo* requestInfo,
                     net::HttpResponseInfo *responseInfo) override {
     LOG(DEBUG) << "OnRequestEnd: " << responseInfo->status;
   }

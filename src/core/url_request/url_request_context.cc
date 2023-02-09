@@ -40,19 +40,12 @@ std::unique_ptr<URLRequest> URLRequestContext::CreateURLRequest(
 
 void URLRequestContext::AddHttpRequestObserver(
     std::weak_ptr<HttpRequestObserver> observer) {
-  url_request_observers_.push_back(observer);
+  url_request_observers_.Push(observer);
 }
 
 void URLRequestContext::RemoveHttpRequestObserver(
     std::weak_ptr<HttpRequestObserver> observer) {
-  int size = url_request_observers_.size();
-  for (int i = 0; i < size; ++i) {
-    if (typeid(url_request_observers_[i]) == typeid(observer)) {
-      url_request_observers_.erase(
-          url_request_observers_.begin() + i);
-      break;
-    }
-  }
+  url_request_observers_.Remove(observer);
 }
 
 NetworkContext *URLRequestContext::network_context() {

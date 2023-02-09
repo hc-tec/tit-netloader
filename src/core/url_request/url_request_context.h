@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "core/base/weak_container.h"
 #include "core/url_request/url_request.h"
 
 namespace tit {
@@ -84,7 +85,7 @@ class URLRequestContext {
 
   HttpTransactionFactory* http_transaction_factory_;
 
-  std::vector<std::weak_ptr<HttpRequestObserver>> url_request_observers_;
+  WeakContainerUnsafe<HttpRequestObserver> url_request_observers_;
 };
 
 }  // namespace net

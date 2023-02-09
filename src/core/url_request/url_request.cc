@@ -46,9 +46,10 @@ void URLRequest::Start() {
 }
 
 void URLRequest::OnRequestStart() {
-  auto observers = context_->network_context()->url_request_observers_;
-  for(auto& observer : observers) {
-    if (!observer.expired()) {
+  auto& observers = context_->network_context()->url_request_observers_;
+  auto elements = observers.GetElements();
+  for(auto& [_, observer] : elements) {
+    if (observers.StillAlive(observer)) {
       auto obs_shared = observer.lock();
       obs_shared->OnRequestStart(this, &request_info_);
     }
@@ -56,19 +57,21 @@ void URLRequest::OnRequestStart() {
 }
 
 void URLRequest::OnRequestEnd() {
-  auto observers = context_->network_context()->url_request_observers_;
-  for(auto& observer : observers) {
-    if (!observer.expired()) {
+  auto& observers = context_->network_context()->url_request_observers_;
+  auto elements = observers.GetElements();
+  for(auto& [_, observer] : elements) {
+    if (observers.StillAlive(observer)) {
       auto obs_shared = observer.lock();
-      obs_shared->OnRequestEnd(this, response_info_);
+      obs_shared->OnRequestEnd(this, &request_info_, response_info_);
     }
   }
 }
 
 void URLRequest::OnRequestError(int err_code) {
-  auto observers = context_->network_context()->url_request_observers_;
-  for(auto& observer : observers) {
-    if (!observer.expired()) {
+  auto& observers = context_->network_context()->url_request_observers_;
+  auto elements = observers.GetElements();
+  for(auto& [_, observer] : elements) {
+    if (observers.StillAlive(observer)) {
       auto obs_shared = observer.lock();
       obs_shared->OnRequestError(this, err_code);
     }

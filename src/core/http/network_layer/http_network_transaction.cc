@@ -108,24 +108,28 @@ int HttpNetworkTransaction::DoHostResolve() {
 void HttpNetworkTransaction::OnConnected(HttpRequestInfo* request_info) {
   LOG(INFO) << "OnConnected";
   auto& observers = url_request_context_->url_request_observers_;
-  for (auto& observer : observers) {
-    if (!observer.expired()) {
+  auto elements = url_request_context_->url_request_observers_.GetElements();
+  for (auto& [_, observer] : elements) {
+    if (observers.StillAlive(observer)) {
       auto observer_share = observer.lock();
       observer_share->OnConnected(session_, request_info);
     }
   }
+  observers.ClearUnlessElements();
 }
 
 void HttpNetworkTransaction::OnBeforeRequest(HttpRequestInfo *request_info,
                                              std::string &request_msg) {
   LOG(INFO) << "OnBeforeRequest";
   auto& observers = url_request_context_->url_request_observers_;
-  for (auto& observer : observers) {
-    if (!observer.expired()) {
+  auto elements = url_request_context_->url_request_observers_.GetElements();
+  for (auto& [_, observer] : elements) {
+    if (observers.StillAlive(observer)) {
       auto observer_share = observer.lock();
       observer_share->OnBeforeRequest(session_, request_info, request_msg);
     }
   }
+  observers.ClearUnlessElements();
 }
 
 void HttpNetworkTransaction::OnResponseHeaderReceived(
@@ -134,8 +138,9 @@ void HttpNetworkTransaction::OnResponseHeaderReceived(
     const std::string& raw_response) {
   LOG(INFO) << "OnResponseHeaderReceived";
   auto& observers = url_request_context_->url_request_observers_;
-  for (auto& observer : observers) {
-    if (!observer.expired()) {
+  auto elements = url_request_context_->url_request_observers_.GetElements();
+  for (auto& [_, observer] : elements) {
+    if (observers.StillAlive(observer)) {
       auto observer_share = observer.lock();
       observer_share->OnResponseHeaderReceived(session_,
                                                request_info,
@@ -143,6 +148,7 @@ void HttpNetworkTransaction::OnResponseHeaderReceived(
                                                raw_response);
     }
   }
+  observers.ClearUnlessElements();
 }
 
 void HttpNetworkTransaction::OnResponseBodyReceived(
@@ -151,8 +157,9 @@ void HttpNetworkTransaction::OnResponseBodyReceived(
     const std::string& raw_response) {
   LOG(INFO) << "OnResponseBodyReceived";
   auto& observers = url_request_context_->url_request_observers_;
-  for (auto& observer : observers) {
-    if (!observer.expired()) {
+  auto elements = url_request_context_->url_request_observers_.GetElements();
+  for (auto& [_, observer] : elements) {
+    if (observers.StillAlive(observer)) {
       auto observer_share = observer.lock();
       observer_share->OnResponseBodyReceived(session_,
                                              request_info,
@@ -160,6 +167,7 @@ void HttpNetworkTransaction::OnResponseBodyReceived(
                                              raw_response);
     }
   }
+  observers.ClearUnlessElements();
 }
 
 void HttpNetworkTransaction::OnHostResolved(HttpRequestInfo* request_info,
@@ -167,8 +175,9 @@ void HttpNetworkTransaction::OnHostResolved(HttpRequestInfo* request_info,
                                             const std::string& dns_ip) {
   LOG(INFO) << "OnHostResolved";
   auto& observers = url_request_context_->url_request_observers_;
-  for (auto& observer : observers) {
-    if (!observer.expired()) {
+  auto elements = url_request_context_->url_request_observers_.GetElements();
+  for (auto& [_, observer] : elements) {
+    if (observers.StillAlive(observer)) {
       auto observer_share = observer.lock();
       observer_share->OnHostResolved(session_,
                                      request_info,
@@ -176,18 +185,21 @@ void HttpNetworkTransaction::OnHostResolved(HttpRequestInfo* request_info,
                                      dns_ip);
     }
   }
+  observers.ClearUnlessElements();
 }
 
 void HttpNetworkTransaction::OnHostResolvedError(
     HttpRequestInfo* request_info) {
   LOG(INFO) << "OnHostResolvedError";
   auto& observers = url_request_context_->url_request_observers_;
-  for (auto& observer : observers) {
-    if (!observer.expired()) {
+  auto elements = url_request_context_->url_request_observers_.GetElements();
+  for (auto& [_, observer] : elements) {
+    if (observers.StillAlive(observer)) {
       auto observer_share = observer.lock();
       observer_share->OnHostResolveError(session_, request_info);
     }
   }
+  observers.ClearUnlessElements();
 }
 
 void HttpNetworkTransaction::OnConnectClosed(HttpRequestInfo* request_info,
@@ -195,12 +207,14 @@ void HttpNetworkTransaction::OnConnectClosed(HttpRequestInfo* request_info,
   LOG(INFO) << "OnConnectClosed";
   stream_->Close();
   auto& observers = url_request_context_->url_request_observers_;
-  for (auto& observer : observers) {
-    if (!observer.expired()) {
+  auto elements = url_request_context_->url_request_observers_.GetElements();
+  for (auto& [_, observer] : elements) {
+    if (observers.StillAlive(observer)) {
       auto observer_share = observer.lock();
       observer_share->OnConnectClosed(session_, request_info, response_info);
     }
   }
+  observers.ClearUnlessElements();
 
 }
 
@@ -208,12 +222,14 @@ void HttpNetworkTransaction::OnResponseAllReceived(
     HttpRequestInfo* request_info, HttpResponseInfo* response_info) {
   LOG(INFO) << "OnResponseAllReceived";
   auto& observers = url_request_context_->url_request_observers_;
-  for (auto& observer : observers) {
-    if (!observer.expired()) {
+  auto elements = url_request_context_->url_request_observers_.GetElements();
+  for (auto& [_, observer] : elements) {
+    if (observers.StillAlive(observer)) {
       auto observer_share = observer.lock();
       observer_share->OnResponseAllReceived(session_, request_info, response_info);
     }
   }
+  observers.ClearUnlessElements();
   if (response_info->headers.GetHeader("Connection") == "close") {
     OnConnectClosed(request_info, response_info);
   }

@@ -19,6 +19,7 @@ class URLRequestObserver {
     virtual void OnRequestStart(URLRequest* request,
                               HttpRequestInfo* requestInfo) {};
     virtual void OnRequestEnd(URLRequest* request,
+                              HttpRequestInfo* requestInfo,
                               HttpResponseInfo* responseInfo) {};
     virtual void OnRequestError(URLRequest* request, int err_code) {};
 };
