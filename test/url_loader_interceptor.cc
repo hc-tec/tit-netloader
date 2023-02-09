@@ -32,8 +32,8 @@ int main() {
   go([]() {
 
     net::NetworkService* service = net::GetNetworkService();
-    service->AddURLLoaderInterceptor(
-        std::make_shared<URLLoaderInterceptorTest>());
+    auto interceptor = std::make_shared<URLLoaderInterceptorTest>();
+    service->AddURLLoaderInterceptor(interceptor);
 
     net::RequestParams params;
     params.request_info.url = net::URL("http://148.70.204.53:3001/static/rest_framework/css/prettify.css");

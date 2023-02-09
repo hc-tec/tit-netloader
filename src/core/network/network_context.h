@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 
+#include "core/base/weak_container.h"
 #include "core/url_request/url_request_job_factory.h"
 
 namespace tit {
@@ -79,9 +80,9 @@ class NetworkContext {
   std::unique_ptr<URLRequestJobFactory> url_request_job_factory_;
   std::unique_ptr<URLRequestContextBuilder> url_request_context_builder_;
 
-  std::vector<std::shared_ptr<URLLoaderInterceptor>> url_loader_interceptors_;
+  WeakContainerUnsafe<URLLoaderInterceptor> url_loader_interceptors_;
   // provide coarse-grained observer API, observes all URLRequest
-  std::vector<std::weak_ptr<URLRequestObserver>> url_request_observers_;
+  WeakContainerUnsafe<URLRequestObserver> url_request_observers_;
 };
 
 

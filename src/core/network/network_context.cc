@@ -26,25 +26,22 @@ NetworkContext::~NetworkContext() {}
 
 void NetworkContext::AddURLLoaderInterceptor(
     std::shared_ptr<URLLoaderInterceptor> interceptor) {
-  url_loader_interceptors_.push_back(interceptor);
+  url_loader_interceptors_.Push(interceptor);
 }
 
 void NetworkContext::RemoveURLLoaderInterceptor(
     std::shared_ptr<URLLoaderInterceptor> interceptor) {
-  int size = url_loader_interceptors_.size();
-  for (int i = 0; i < size; ++i) {
-    if (typeid(url_loader_interceptors_[i]) == typeid(interceptor)) {
-      url_loader_interceptors_.erase(
-          url_loader_interceptors_.begin() + i);
-      break;
-    }
-  }
+  url_loader_interceptors_.Remove(interceptor);
 }
 
 bool NetworkContext::URLLoaderIntercept(NetworkService* service,
                                         RequestParams* params) {
-  for (auto& interceptor : url_loader_interceptors_) {
-    if (!interceptor->Interceptor(service, params)) return false;
+  auto interceptors = url_loader_interceptors_.GetElements();
+  for (auto& [_, interceptor] : interceptors) {
+    if (url_loader_interceptors_.StillAlive(interceptor)) {
+      auto interceptor_share = interceptor.lock();
+      if (!interceptor_share->Interceptor(service, params)) return false;
+    }
   }
   return true;
 }
@@ -58,19 +55,12 @@ bool NetworkContext::SetProtocolHandler(
 
 void NetworkContext::AddURLRequestObserver(
     std::weak_ptr<URLRequestObserver> observer) {
-  url_request_observers_.push_back(observer);
+  url_request_observers_.Push(observer);
 }
 
 void NetworkContext::RemoveURLRequestObserver(
     std::weak_ptr<URLRequestObserver> observer) {
-  int size = url_loader_interceptors_.size();
-  for (int i = 0; i < size; ++i) {
-    if (typeid(url_loader_interceptors_[i]) == typeid(observer)) {
-      url_loader_interceptors_.erase(
-          url_loader_interceptors_.begin() + i);
-      break;
-    }
-  }
+  url_request_observers_.Remove(observer);
 }
 
 }  // namespace net
