@@ -50,7 +50,7 @@ void URLRequest::OnRequestStart() {
   auto elements = observers.GetElements();
   for(auto& [_, observer] : elements) {
     if (observers.StillAlive(observer)) {
-      auto obs_shared = observer.lock();
+      auto obs_shared = observers.GetPtr(observer);
       obs_shared->OnRequestStart(this, &request_info_);
     }
   }
@@ -61,7 +61,7 @@ void URLRequest::OnRequestEnd() {
   auto elements = observers.GetElements();
   for(auto& [_, observer] : elements) {
     if (observers.StillAlive(observer)) {
-      auto obs_shared = observer.lock();
+      auto obs_shared = observers.GetPtr(observer);
       obs_shared->OnRequestEnd(this, &request_info_, response_info_);
     }
   }
@@ -72,7 +72,7 @@ void URLRequest::OnRequestError(int err_code) {
   auto elements = observers.GetElements();
   for(auto& [_, observer] : elements) {
     if (observers.StillAlive(observer)) {
-      auto obs_shared = observer.lock();
+      auto obs_shared = observers.GetPtr(observer);
       obs_shared->OnRequestError(this, err_code);
     }
   }

@@ -111,7 +111,7 @@ void HttpNetworkTransaction::OnConnected(HttpRequestInfo* request_info) {
   auto elements = url_request_context_->url_request_observers_.GetElements();
   for (auto& [_, observer] : elements) {
     if (observers.StillAlive(observer)) {
-      auto observer_share = observer.lock();
+      auto observer_share = observers.GetPtr(observer);
       observer_share->OnConnected(session_, request_info);
     }
   }
@@ -125,7 +125,7 @@ void HttpNetworkTransaction::OnBeforeRequest(HttpRequestInfo *request_info,
   auto elements = url_request_context_->url_request_observers_.GetElements();
   for (auto& [_, observer] : elements) {
     if (observers.StillAlive(observer)) {
-      auto observer_share = observer.lock();
+      auto observer_share = observers.GetPtr(observer);
       observer_share->OnBeforeRequest(session_, request_info, request_msg);
     }
   }
@@ -141,7 +141,7 @@ void HttpNetworkTransaction::OnResponseHeaderReceived(
   auto elements = url_request_context_->url_request_observers_.GetElements();
   for (auto& [_, observer] : elements) {
     if (observers.StillAlive(observer)) {
-      auto observer_share = observer.lock();
+      auto observer_share = observers.GetPtr(observer);
       observer_share->OnResponseHeaderReceived(session_,
                                                request_info,
                                                response_info,
@@ -160,7 +160,7 @@ void HttpNetworkTransaction::OnResponseBodyReceived(
   auto elements = url_request_context_->url_request_observers_.GetElements();
   for (auto& [_, observer] : elements) {
     if (observers.StillAlive(observer)) {
-      auto observer_share = observer.lock();
+      auto observer_share = observers.GetPtr(observer);
       observer_share->OnResponseBodyReceived(session_,
                                              request_info,
                                              response_info,
@@ -178,7 +178,7 @@ void HttpNetworkTransaction::OnHostResolved(HttpRequestInfo* request_info,
   auto elements = url_request_context_->url_request_observers_.GetElements();
   for (auto& [_, observer] : elements) {
     if (observers.StillAlive(observer)) {
-      auto observer_share = observer.lock();
+      auto observer_share = observers.GetPtr(observer);
       observer_share->OnHostResolved(session_,
                                      request_info,
                                      need_host_resolve,
@@ -195,7 +195,7 @@ void HttpNetworkTransaction::OnHostResolvedError(
   auto elements = url_request_context_->url_request_observers_.GetElements();
   for (auto& [_, observer] : elements) {
     if (observers.StillAlive(observer)) {
-      auto observer_share = observer.lock();
+      auto observer_share = observers.GetPtr(observer);
       observer_share->OnHostResolveError(session_, request_info);
     }
   }
@@ -210,7 +210,7 @@ void HttpNetworkTransaction::OnConnectClosed(HttpRequestInfo* request_info,
   auto elements = url_request_context_->url_request_observers_.GetElements();
   for (auto& [_, observer] : elements) {
     if (observers.StillAlive(observer)) {
-      auto observer_share = observer.lock();
+      auto observer_share = observers.GetPtr(observer);
       observer_share->OnConnectClosed(session_, request_info, response_info);
     }
   }
@@ -225,7 +225,7 @@ void HttpNetworkTransaction::OnResponseAllReceived(
   auto elements = url_request_context_->url_request_observers_.GetElements();
   for (auto& [_, observer] : elements) {
     if (observers.StillAlive(observer)) {
-      auto observer_share = observer.lock();
+      auto observer_share = observers.GetPtr(observer);
       observer_share->OnResponseAllReceived(session_, request_info, response_info);
     }
   }

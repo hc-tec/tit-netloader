@@ -39,7 +39,7 @@ bool NetworkContext::URLLoaderIntercept(NetworkService* service,
   auto interceptors = url_loader_interceptors_.GetElements();
   for (auto& [_, interceptor] : interceptors) {
     if (url_loader_interceptors_.StillAlive(interceptor)) {
-      auto interceptor_share = interceptor.lock();
+      auto interceptor_share = url_loader_interceptors_.GetPtr(interceptor);
       if (!interceptor_share->Interceptor(service, params)) return false;
     }
   }
