@@ -34,10 +34,10 @@ class NetworkService : public URLLoader::Delegate {
       RequestParams& request_params);
 
   void AddURLLoaderInterceptor(
-      std::shared_ptr<URLLoaderInterceptor> interceptor);
+      std::weak_ptr<URLLoaderInterceptor> interceptor);
 
   void RemoveURLLoaderInterceptor(
-      std::shared_ptr<URLLoaderInterceptor> interceptor);
+      std::weak_ptr<URLLoaderInterceptor> interceptor);
 
   bool SetProtocolHandler(const std::string& scheme,
                           std::unique_ptr<URLRequestJobFactory::ProtocolHandler>

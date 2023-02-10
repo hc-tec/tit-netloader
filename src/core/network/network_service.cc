@@ -48,12 +48,12 @@ NetworkService::~NetworkService() {
 }
 
 void NetworkService::AddURLLoaderInterceptor(
-    std::shared_ptr<URLLoaderInterceptor> interceptor) {
+    std::weak_ptr<URLLoaderInterceptor> interceptor) {
   network_context_->AddURLLoaderInterceptor(interceptor);
 }
 
 void NetworkService::RemoveURLLoaderInterceptor(
-    std::shared_ptr<URLLoaderInterceptor> interceptor) {
+    std::weak_ptr<URLLoaderInterceptor> interceptor) {
   network_context_->RemoveURLLoaderInterceptor(interceptor);
 }
 

@@ -25,12 +25,12 @@ NetworkContext::NetworkContext()
 NetworkContext::~NetworkContext() {}
 
 void NetworkContext::AddURLLoaderInterceptor(
-    std::shared_ptr<URLLoaderInterceptor> interceptor) {
+    std::weak_ptr<URLLoaderInterceptor> interceptor) {
   url_loader_interceptors_.Push(interceptor);
 }
 
 void NetworkContext::RemoveURLLoaderInterceptor(
-    std::shared_ptr<URLLoaderInterceptor> interceptor) {
+    std::weak_ptr<URLLoaderInterceptor> interceptor) {
   url_loader_interceptors_.Remove(interceptor);
 }
 

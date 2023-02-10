@@ -54,10 +54,10 @@ class NetworkContext {
   }
 
   void AddURLLoaderInterceptor(
-      std::shared_ptr<URLLoaderInterceptor> interceptor);
+      std::weak_ptr<URLLoaderInterceptor> interceptor);
 
   void RemoveURLLoaderInterceptor(
-      std::shared_ptr<URLLoaderInterceptor> interceptor);
+      std::weak_ptr<URLLoaderInterceptor> interceptor);
 
   bool URLLoaderIntercept(NetworkService* service,
                           RequestParams* params);
