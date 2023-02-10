@@ -8,23 +8,30 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include <cstdio>
 
 #include "co/co/mutex.h"
 
 namespace tit {
 
+inline const char* labelClassName(char* name, void* el) {
+  snprintf(name, 8, "%x", el);
+}
+
 template <typename T>
 class WeakContainerUnsafe {
  public:
   void Push(std::weak_ptr<T> el) {
-    const char* id = typeid(el).name();
+    char id[8];
+    labelClassName(id, el.lock().get());
     if (elements_.find(id) == elements_.end()) {
       elements_.insert({id, el});
     }
   }
 
   void Remove(std::weak_ptr<T> el) {
-    const char* id = typeid(el).name();
+    char id[8];
+    labelClassName(id, el.lock().get());
     auto it = elements_.find(id);
     if (it == elements_.end()) return;
     elements_.erase(it);
@@ -38,8 +45,10 @@ class WeakContainerUnsafe {
   }
 
   bool StillAlive(std::weak_ptr<T> el) {
+    char id[8];
+    labelClassName(id, el.lock().get());
     if (el.expired()) {
-      unless_elements_.push_back(typeid(el).name());
+      unless_elements_.push_back(id);
       return false;
     }
     return true;
