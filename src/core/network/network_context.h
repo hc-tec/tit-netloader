@@ -69,8 +69,14 @@ class NetworkContext {
   void AddURLRequestObserver(
       std::weak_ptr<URLRequestObserver> observer);
 
+  void AddURLRequestObserver(
+      URLRequestObserver* observer);
+
   void RemoveURLRequestObserver(
       std::weak_ptr<URLRequestObserver> observer);
+
+  void RemoveURLRequestObserver(
+      URLRequestObserver* observer);
 
  private:
   friend URLRequest;

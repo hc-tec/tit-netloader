@@ -53,8 +53,16 @@ void URLLoader::AddHttpRequestObserver(
   url_request_context_->AddHttpRequestObserver(observer);
 }
 
+void URLLoader::AddHttpRequestObserver(HttpRequestObserver *observer) {
+  url_request_context_->AddHttpRequestObserver(observer);
+}
+
 void URLLoader::RemoveHttpRequestObserver(
     std::weak_ptr<HttpRequestObserver> observer) {
+  url_request_context_->RemoveHttpRequestObserver(observer);
+}
+
+void URLLoader::RemoveHttpRequestObserver(HttpRequestObserver *observer) {
   url_request_context_->RemoveHttpRequestObserver(observer);
 }
 

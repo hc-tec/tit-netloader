@@ -43,14 +43,24 @@ void URLRequestContext::AddHttpRequestObserver(
   url_request_observers_.Push(observer);
 }
 
+void URLRequestContext::AddHttpRequestObserver(HttpRequestObserver *observer) {
+  url_request_observers_.Push(observer);
+}
+
 void URLRequestContext::RemoveHttpRequestObserver(
     std::weak_ptr<HttpRequestObserver> observer) {
+  url_request_observers_.Remove(observer);
+}
+
+void URLRequestContext::RemoveHttpRequestObserver(
+    HttpRequestObserver *observer) {
   url_request_observers_.Remove(observer);
 }
 
 NetworkContext *URLRequestContext::network_context() {
   return url_request_context_builder_->network_context();
 }
+
 
 }  // namespace net
 }  // namespace tit

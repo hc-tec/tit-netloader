@@ -69,8 +69,14 @@ class URLRequestContext {
   void AddHttpRequestObserver(
       std::weak_ptr<HttpRequestObserver> observer);
 
+  void AddHttpRequestObserver(
+      HttpRequestObserver* observer);
+
   void RemoveHttpRequestObserver(
       std::weak_ptr<HttpRequestObserver> observer);
+
+  void RemoveHttpRequestObserver(
+      HttpRequestObserver* observer);
 
  private:
   friend HttpNetworkTransaction;

@@ -58,8 +58,16 @@ void NetworkContext::AddURLRequestObserver(
   url_request_observers_.Push(observer);
 }
 
+void NetworkContext::AddURLRequestObserver(URLRequestObserver* observer) {
+  url_request_observers_.Push(observer);
+}
+
 void NetworkContext::RemoveURLRequestObserver(
     std::weak_ptr<URLRequestObserver> observer) {
+  url_request_observers_.Remove(observer);
+}
+
+void NetworkContext::RemoveURLRequestObserver(URLRequestObserver* observer) {
   url_request_observers_.Remove(observer);
 }
 

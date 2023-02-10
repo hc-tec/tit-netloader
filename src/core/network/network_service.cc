@@ -69,8 +69,16 @@ void NetworkService::AddURLRequestObserver(
   network_context_->AddURLRequestObserver(observer);
 }
 
+void NetworkService::AddURLRequestObserver(URLRequestObserver* observer) {
+  network_context_->AddURLRequestObserver(observer);
+}
+
 void NetworkService::RemoveURLRequestObserver(
     std::weak_ptr<URLRequestObserver> observer) {
+  network_context_->RemoveURLRequestObserver(observer);
+}
+
+void NetworkService::RemoveURLRequestObserver(URLRequestObserver* observer) {
   network_context_->RemoveURLRequestObserver(observer);
 }
 

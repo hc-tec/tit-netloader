@@ -46,8 +46,14 @@ class NetworkService : public URLLoader::Delegate {
   void AddURLRequestObserver(
       std::weak_ptr<URLRequestObserver> observer);
 
+  void AddURLRequestObserver(
+      URLRequestObserver* observer);
+
   void RemoveURLRequestObserver(
       std::weak_ptr<URLRequestObserver> observer);
+
+  void RemoveURLRequestObserver(
+      URLRequestObserver* observer);
 
  private:
   friend URLLoaderInterceptor;
