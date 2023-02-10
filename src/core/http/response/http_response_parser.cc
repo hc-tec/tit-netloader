@@ -187,7 +187,7 @@ size_t HttpResponseParser::RemainSize() {
       return remain;
     }
   }
-  return 0;
+  return -1;
 }
 
 }  // namespace net

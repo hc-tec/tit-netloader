@@ -102,6 +102,21 @@ int HttpBasicStream::ReadResponseBody() {
                                       remain_buf.data());
   }
 
+  if (remain == -1) {
+    while (1) {
+      char buf[MAX_READ_LEN];
+      int buf_size = connection_->socket()->Read(buf, MAX_READ_LEN);
+      if (buf_size == 0) {
+        delegate_->OnResponseAllReceived(request_info_, response_info_);
+        return OK;
+      }
+      response_info_->buffer.Buffer(buf, buf_size);
+      response_parser_->ParseBody();
+      delegate_->OnResponseBodyReceived(request_info_, response_info_,
+                                        std::string(buf, buf_size));
+    }
+  }
+
   while (remain > 0) {
     char buf[MAX_READ_LEN];
     int buf_size = connection_->socket()->Read(buf, MAX_READ_LEN);
