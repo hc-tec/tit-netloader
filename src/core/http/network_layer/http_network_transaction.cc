@@ -230,7 +230,8 @@ void HttpNetworkTransaction::OnResponseAllReceived(
     }
   }
   observers.ClearUnlessElements();
-  if (response_info->headers.GetHeader("Connection") == "close") {
+  if (response_info->headers.GetHeader("Connection") == "close" ||
+      request_info->headers.GetHeader("Connection") == "close") {
     OnConnectClosed(request_info, response_info);
   }
 }

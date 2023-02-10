@@ -27,6 +27,8 @@ class HttpResponseBody {
 
   virtual size_t GetSize() = 0;
 
+  virtual void SetPosition(int pos) = 0;
+
   // for testing
   virtual std::string ToString() = 0;
 };
@@ -41,6 +43,7 @@ class HttpResponseBufferBody :
   size_t Read(std::string_view*, size_t buf_size) override;
   size_t Buffer(char*, size_t buf_size) override;
   size_t GetSize() override;
+  void SetPosition(int pos) override;
   std::string ToString() override;
 };
 

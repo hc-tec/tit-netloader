@@ -29,6 +29,9 @@ size_t HttpResponseBufferBody::Read(std::string_view* buf, size_t buf_size) {
 std::string HttpResponseBufferBody::ToString() {
   return buffer_.empty() ? "" : buffer_;
 }
+void HttpResponseBufferBody::SetPosition(int pos) {
+  this->IOBuffer::SetPosition(pos);
+}
 
 log::LogStream& operator<<(log::LogStream& stream,
                            std::shared_ptr<HttpResponseBody> body) {

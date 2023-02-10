@@ -59,7 +59,7 @@ int HttpBasicStream::SendRequest(HttpResponseInfo* response_info) {
   }
   std::string request = request_line +
                         request_info_->headers.ToString() +
-      (request_info_->body ? body_data : "");
+                        (request_info_->body ? body_data : "");
 
   if (!connection_->socket()->IsConnected()) {
     bool connected = connection_->socket()->Connect(request_info_->address);
@@ -92,9 +92,14 @@ int HttpBasicStream::ReadResponseHeaders() {
 
 int HttpBasicStream::ReadResponseBody() {
   int remain = response_parser_->RemainSize();
-  if (remain <= 0) {
-    delegate_->OnResponseAllReceived(request_info_, response_info_);
-    return OK;
+  if (remain <= 0 && response_info_->body->GetSize() > 0) {
+    auto& body = response_info_->body;
+    std::string_view remain_buf;
+    body->Read(&remain_buf, body->GetSize());
+    body->SetPosition(0);
+    response_parser_->ParseBody();
+    delegate_->OnResponseBodyReceived(request_info_, response_info_,
+                                      remain_buf.data());
   }
 
   while (remain > 0) {

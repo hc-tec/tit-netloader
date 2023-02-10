@@ -82,6 +82,7 @@ int headers_complete_cb(http_parser* p)
 {
 //  LOG(TRACE) << "header finish";
   HttpResponseParser* parser = static_cast<HttpResponseParser*>(p->data);
+  http_parser_pause(p, true);
 //  messages[num_messages].should_keep_alive = http_should_keep_alive(parser);
   return 0;
 }
@@ -116,10 +117,10 @@ int message_complete_cb(http_parser* p)
 
 
 http_parser_settings settings = { message_begin_cb, nullptr,
-                                 response_status_cb, header_field_cb,
-                                 header_value_cb, headers_complete_cb,
-                                 body_cb, message_complete_cb,
-                                 nullptr, nullptr };
+                                  response_status_cb, header_field_cb,
+                                  header_value_cb, headers_complete_cb,
+                                  body_cb, message_complete_cb,
+                                  nullptr, nullptr };
 
 void HttpResponseParser::ParseHeaders() {
   state_ = kParseHeader;
@@ -133,8 +134,12 @@ void HttpResponseParser::ParseHeaders() {
                                       real_buffer.data(), real_buffer.size());
   LOG(TRACE) << "Response parse size: " << parsed;
   if (parsed != real_buffer.size()) {
-    buffer.SetPosition(parsed);
-    LOG(TRACE) << "Response Remain data: \n" << real_buffer.substr(parsed).data();
+    buffer.SetPosition(parsed+1);
+    std::string_view remain_buffer;
+    buffer.ReadRemainAll(&remain_buffer);
+    response_info_->body->Buffer(const_cast<char*>(remain_buffer.data()),
+                                 remain_buffer.size());
+    LOG(TRACE) << "Response Remain data: \n" << remain_buffer.data();
   }
 }
 
